@@ -6,37 +6,42 @@ import { Celebration } from '@/components/Celebration';
 import { CoupleSection } from '@/components/CoupleSection';
 import { FinalSection } from '@/components/FinalSection';
 import { HeroSection } from '@/components/HeroSection';
+import { InvitationLetter } from '@/components/InvitationLetter';
 import { InvitationSection } from '@/components/InvitationSection';
 import { MusicButton } from '@/components/MusicButton';
-import { OpeningScreen } from '@/components/OpeningScreen';
 import { PetalEffect } from '@/components/PetalEffect';
 import { ScratchScreen } from '@/components/ScratchScreen';
+import { TempleDoors } from '@/components/temple/TempleDoors';
 import { TimelineSection } from '@/components/TimelineSection';
 import { MUSIC_SRC, WEDDING_DATE } from '@/data/wedding';
 import { useMusic } from '@/hooks/useMusic';
 
 /**
- * closed   → doors shut, waiting for "કંકોત્રી ખોલો"
- * opening  → doors swinging open over the scratch card
+ * letter   → sealed invitation letter; dissolves into ivory
+ * closed   → temple doorway, waiting for "Tap to Enter"
+ * opening  → carved doors swing open, camera moves into the light (scratch card waits underneath)
  * scratch  → scratch the gold foil; on reveal the song starts and flowers burst
  * entering → ~2s later the scratch screen fades out by itself, hero words rise
  * open     → free scrolling
  */
-type Phase = 'closed' | 'opening' | 'scratch' | 'entering' | 'open';
-
-const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+type Phase = 'letter' | 'closed' | 'opening' | 'scratch' | 'entering' | 'open';
 
 export default function Home() {
-  const [phase, setPhase] = useState<Phase>('closed');
+  const [phase, setPhase] = useState<Phase>('letter');
+  const [doorsGone, setDoorsGone] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   const music = useMusic(MUSIC_SRC);
   const { play } = music;
 
+  // Fires once the letter has dissolved into ivory — the temple doorway emerges from it
+  const handleLetterOpened = useCallback(() => setPhase('closed'), []);
+
   const handleOpen = useCallback(() => {
     window.scrollTo(0, 0);
     setPhase('opening');
-    setTimeout(() => setPhase('scratch'), prefersReduced() ? 350 : 2300);
   }, []);
+  const handleDoorsOpened = useCallback(() => setPhase('scratch'), []);
+  const handleDoorsDone = useCallback(() => setDoorsGone(true), []);
 
   // After the foil is scratched: song + burst, then move on automatically
   const handleReveal = useCallback(() => {
@@ -64,9 +69,15 @@ export default function Home() {
     <div className="relative w-full min-h-screen overflow-x-hidden">
       <PetalEffect active={heroStarted} />
 
-      {(phase === 'closed' || phase === 'opening') && (
+      {phase === 'letter' && (
         <div className="print:hidden">
-          <OpeningScreen opening={phase === 'opening'} onOpen={handleOpen} />
+          <InvitationLetter onOpened={handleLetterOpened} />
+        </div>
+      )}
+
+      {!doorsGone && (phase === 'closed' || phase === 'opening' || phase === 'scratch') && (
+        <div className="print:hidden">
+          <TempleDoors onEnter={handleOpen} onOpened={handleDoorsOpened} onDone={handleDoorsDone} />
         </div>
       )}
 
@@ -87,7 +98,7 @@ export default function Home() {
         <FinalSection />
       </main>
 
-      {phase !== 'closed' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
+      {phase !== 'letter' && phase !== 'closed' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
     </div>
   );
 }

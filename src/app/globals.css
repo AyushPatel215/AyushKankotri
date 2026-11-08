@@ -30,7 +30,6 @@
     --safe-right: env(safe-area-inset-right, 0px);
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     --ease-soft: cubic-bezier(0.45, 0, 0.2, 1);
-    --ease-door: cubic-bezier(0.6, 0.05, 0.25, 1);
   }
 
   * {
@@ -171,92 +170,6 @@
     opacity: 1;
     transform: none;
   }
-}
-
-/* ---------- Doors ---------- */
-.doors {
-  perspective: 1400px;
-}
-.door {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  overflow: hidden;
-  transition:
-    transform 2.1s var(--ease-door),
-    opacity 0.7s ease 1.5s;
-  backface-visibility: hidden;
-  will-change: transform;
-  background-color: #e6cdb5;
-  background-image:
-    radial-gradient(120% 70% at 50% 50%, rgba(251, 243, 234, 0.75), transparent 75%),
-    repeating-linear-gradient(45deg, rgba(138, 90, 43, 0.12) 0 1px, transparent 1px 26px),
-    repeating-linear-gradient(-45deg, rgba(138, 90, 43, 0.12) 0 1px, transparent 1px 26px);
-}
-.door-left {
-  left: 0;
-  transform-origin: left center;
-  box-shadow: inset -12px 0 24px -12px rgba(90, 55, 30, 0.45);
-}
-.door-right {
-  right: 0;
-  transform-origin: right center;
-  box-shadow: inset 12px 0 24px -12px rgba(90, 55, 30, 0.45);
-}
-.is-opening .door-left {
-  transform: rotateY(-108deg);
-  opacity: 0;
-}
-.is-opening .door-right {
-  transform: rotateY(108deg);
-  opacity: 0;
-}
-.door-frame {
-  position: absolute;
-  inset: 16px 10px;
-  border: 1.5px solid rgba(168, 131, 63, 0.8);
-  box-shadow:
-    inset 0 0 0 5px rgba(230, 205, 181, 0.9),
-    inset 0 0 0 6px rgba(168, 131, 63, 0.4);
-}
-.door-left .door-frame {
-  border-radius: 140px 0 0 0;
-  right: 6px;
-}
-.door-right .door-frame {
-  border-radius: 0 140px 0 0;
-  left: 6px;
-}
-.cover-content {
-  transition:
-    opacity 0.6s var(--ease-soft),
-    transform 0.6s var(--ease-soft);
-}
-.is-opening .cover-content {
-  opacity: 0;
-  transform: scale(0.97);
-}
-.is-opening .cover-toran {
-  transition: opacity 0.9s ease 1.2s;
-  opacity: 0;
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(241, 221, 166, 0.45),
-      0 10px 26px -10px rgba(90, 55, 30, 0.5);
-  }
-  50% {
-    box-shadow:
-      0 0 0 12px rgba(241, 221, 166, 0),
-      0 10px 26px -10px rgba(90, 55, 30, 0.5);
-  }
-}
-.glow-btn {
-  animation: glow 3.2s ease-in-out infinite;
 }
 
 /* ---------- Scratch screen ---------- */
@@ -569,13 +482,6 @@
     animation: none !important;
     transition: none !important;
   }
-  .door {
-    transition: opacity 0.3s ease;
-  }
-  .is-opening .door-left,
-  .is-opening .door-right {
-    transform: none;
-  }
   .timeline-line {
     transform: none;
     transition: none;
@@ -588,11 +494,782 @@
   .spin-med,
   .diya-flame,
   .temple-flag,
-  .glow-btn,
   .shimmer,
   .bob,
   .swipe-hint,
   .eq span {
     animation: none;
+  }
+}
+
+/* =====================================================================
+   Opening invitation letter (phase 1) — sealed gatefold on ivory paper
+   ===================================================================== */
+:root {
+  --lt-ivory: #f8f4eb;
+  --lt-gold: #a8833f;
+  --lt-gold-soft: #b8975a;
+  --lt-ink: #5a3d2b;
+  --lt-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.32 0 0 0 0 0.2 0.55 0 0 0 -0.24'/></filter><rect width='200' height='200' filter='url(%23g)'/></svg>");
+  --lt-fibre: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.016' numOctaves='4' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.43 0 0 0 0 0.27 0.3 0 0 0 -0.1'/></filter><rect width='420' height='420' filter='url(%23f)'/></svg>");
+  --lt-ease: cubic-bezier(0.42, 0.05, 0.22, 1);
+}
+
+.lt-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  background-color: var(--lt-ivory);
+  animation: lt-bg-in 1.4s ease backwards;
+}
+.lt-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(70% 55% at 30% 16%, rgba(255, 253, 247, 0.95), transparent 70%),
+    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(122, 92, 52, 0.17) 100%),
+    var(--lt-fibre), var(--lt-grain);
+  animation: lt-fade 1.8s ease 0.1s backwards;
+}
+
+.lt-corner {
+  position: absolute;
+  width: clamp(72px, min(24vw, 24svh), 200px);
+  height: auto;
+  opacity: 0.5;
+  pointer-events: none;
+  animation: lt-fade 2.2s ease 0.5s backwards;
+  transition: opacity 0.9s ease;
+}
+.lt-corner.c-tl { top: calc(var(--safe-top) + 6px); left: 6px; }
+.lt-corner.c-tr { top: calc(var(--safe-top) + 6px); right: 6px; transform: scaleX(-1); }
+.lt-corner.c-bl { bottom: calc(var(--safe-bottom) + 6px); left: 6px; transform: scaleY(-1); }
+.lt-corner.c-br { bottom: calc(var(--safe-bottom) + 6px); right: 6px; transform: scale(-1, -1); }
+
+.lt-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 16px);
+}
+.lt-screen:not(.is-idle) .lt-stage {
+  pointer-events: none;
+}
+
+.lt-enter {
+  animation: lt-card-in 1.9s var(--ease-out) 0.35s backwards;
+}
+
+/* The card — sized by width so every inner measurement can use cqw */
+.lt-card {
+  position: relative;
+  display: block;
+  width: min(84vw, 400px, calc((100vh - 120px) * 0.64));
+  width: min(84vw, 400px, calc((100svh - 120px) * 0.64));
+  aspect-ratio: 0.64;
+  container-type: inline-size;
+  cursor: pointer;
+  outline: none;
+  border-radius: 6px;
+  transition: transform 0.6s var(--ease-out);
+}
+.lt-card:focus-visible {
+  outline: 1px solid var(--lt-gold);
+  outline-offset: 8px;
+}
+.is-pressing .lt-card {
+  transform: scale(0.992);
+  transition-duration: 0.25s;
+}
+.is-revealing .lt-card,
+.is-opened .lt-card {
+  transform: scale(1.32) translateY(-2%);
+  opacity: 0;
+  transition:
+    transform 1.2s cubic-bezier(0.5, 0, 0.3, 1),
+    opacity 0.95s ease 0.15s;
+}
+@media (hover: hover) {
+  .is-idle .lt-card:hover {
+    transform: translateY(-4px);
+  }
+  .is-idle .lt-card:hover .lt-seal {
+    transform: scale(1.035);
+  }
+}
+
+/* Inner paper revealed under the panels; carries the card's natural shadow */
+.lt-inside {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-image:
+    var(--lt-grain),
+    radial-gradient(ellipse at 50% 45%, #fffaf0 0%, #f7efdf 68%, #ede1ca 100%);
+  box-shadow:
+    0 1px 1px rgba(74, 52, 30, 0.08),
+    0 3px 6px rgba(74, 52, 30, 0.07),
+    0 16px 26px -10px rgba(74, 52, 30, 0.2),
+    0 38px 64px -22px rgba(74, 52, 30, 0.32);
+}
+.lt-inside::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(60, 40, 20, 0.3), transparent 22%, transparent 78%, rgba(60, 40, 20, 0.3));
+  transition: opacity 1.6s ease 0.2s;
+}
+.is-opening .lt-inside::before,
+.is-revealing .lt-inside::before,
+.is-opened .lt-inside::before {
+  opacity: 0;
+}
+.lt-inside-mandala {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 74cqw;
+  height: 74cqw;
+  transform: translate(-50%, -50%);
+}
+
+/* Gatefold panels */
+.lt-panels {
+  position: absolute;
+  inset: 0;
+  perspective: 1800px;
+}
+.lt-flap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transform-style: preserve-3d;
+  transition: transform 2s var(--lt-ease);
+}
+.lt-flap-l { left: 0; transform-origin: 0 50%; }
+.lt-flap-r { right: 0; transform-origin: 100% 50%; }
+.is-opening .lt-flap-l,
+.is-revealing .lt-flap-l,
+.is-opened .lt-flap-l {
+  transform: rotateY(-172deg);
+}
+.is-opening .lt-flap-r,
+.is-revealing .lt-flap-r,
+.is-opened .lt-flap-r {
+  transform: rotateY(172deg);
+}
+
+.lt-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.lt-flap-l .lt-face { border-radius: 6px 0 0 6px; }
+.lt-flap-r .lt-face { border-radius: 0 6px 6px 0; }
+.lt-back {
+  transform: rotateY(180deg);
+  background-image: var(--lt-grain), linear-gradient(90deg, #efe5d1, #f8f2e6);
+  box-shadow: 0 10px 30px -12px rgba(74, 52, 30, 0.3);
+}
+.lt-back-rule {
+  position: absolute;
+  inset: 5cqw;
+  border: 1px solid rgba(168, 131, 63, 0.35);
+}
+/* the fold along the seam — inside the artwork so the seal sits on top of it */
+.lt-fold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  margin-left: -1.5px;
+  background: linear-gradient(90deg, transparent, rgba(110, 80, 45, 0.1) 45%, rgba(255, 255, 255, 0.6) 55%, transparent);
+}
+.lt-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+.lt-flap-l .lt-shade { background: linear-gradient(90deg, rgba(50, 32, 15, 0.06), rgba(50, 32, 15, 0.42)); }
+.lt-flap-r .lt-shade { background: linear-gradient(270deg, rgba(50, 32, 15, 0.06), rgba(50, 32, 15, 0.42)); }
+.is-opening .lt-shade {
+  animation: lt-shade 2s var(--lt-ease) forwards;
+}
+
+/* Front artwork — full card width, each panel shows its own half */
+.lt-face-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 200%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8cqw 12cqw 0;
+  color: var(--lt-ink);
+  background-color: #fcfaf4;
+  background-image:
+    var(--lt-grain), var(--lt-fibre),
+    radial-gradient(130% 90% at 30% 6%, #fffefa 0%, #fbf7ee 55%, #f4ecdc 100%);
+}
+.lt-flap-l .lt-face-content { left: 0; }
+.lt-flap-r .lt-face-content { left: -100%; }
+
+.lt-rule {
+  position: absolute;
+  inset: 4.2cqw;
+  border: 1px solid rgba(168, 131, 63, 0.7);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.lt-rule::after {
+  content: '';
+  position: absolute;
+  inset: 1.3cqw;
+  border: 0.5px solid rgba(168, 131, 63, 0.45);
+}
+.lt-card-corner {
+  position: absolute;
+  width: 9cqw;
+  height: 9cqw;
+  color: var(--lt-gold);
+}
+.lt-card-corner.tl { top: 6.6cqw; left: 6.6cqw; }
+.lt-card-corner.tr { top: 6.6cqw; right: 6.6cqw; transform: scaleX(-1); }
+.lt-card-corner.bl { bottom: 6.6cqw; left: 6.6cqw; transform: scaleY(-1); }
+.lt-card-corner.br { bottom: 6.6cqw; right: 6.6cqw; transform: scale(-1, -1); }
+
+.lt-peacock {
+  width: 34cqw;
+  animation: lt-peacock 2s var(--ease-out) 0.9s backwards;
+}
+.lt-title {
+  margin-top: 0.2cqw;
+  font-size: 10.5cqw;
+  line-height: 1.25;
+}
+.lt-divider {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  margin: 1.2cqw 0 2.6cqw;
+}
+.lt-divider span {
+  width: 11cqw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lt-gold-soft));
+}
+.lt-divider span:last-child {
+  background: linear-gradient(270deg, transparent, var(--lt-gold-soft));
+}
+.lt-divider i {
+  width: 1.5cqw;
+  height: 1.5cqw;
+  border: 1px solid var(--lt-gold);
+  transform: rotate(45deg);
+}
+.lt-name {
+  font-size: 8.4cqw;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.16em;
+  padding-left: 0.16em;
+  text-transform: uppercase;
+  color: #94702f;
+}
+.lt-amp {
+  font-size: 7.4cqw;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1;
+  margin: 0.4cqw 0 0.8cqw;
+  color: var(--lt-gold-soft);
+}
+.lt-copy {
+  max-width: 66cqw;
+  text-wrap: balance;
+  font-size: 4.15cqw;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.42;
+  color: var(--lt-ink);
+}
+.lt-name + .lt-copy {
+  margin-top: 4.2cqw;
+}
+.lt-copy + .lt-copy {
+  margin-top: 1.4cqw;
+}
+
+/* Wax seal on the seam, lower-middle */
+.lt-seal-slot {
+  position: absolute;
+  left: 50%;
+  top: calc(79% - 12.5cqw);
+  width: 25cqw;
+  margin-left: -12.5cqw;
+  animation: lt-seal-in 1.3s var(--ease-out) 2.7s backwards;
+}
+.lt-seal {
+  transition:
+    transform 0.28s ease,
+    filter 0.28s ease;
+  filter: drop-shadow(0 1.5px 1px rgba(58, 12, 18, 0.45)) drop-shadow(0 6px 8px rgba(70, 25, 20, 0.28));
+}
+.is-pressing .lt-seal,
+.is-opening .lt-seal {
+  transform: scale(0.93);
+  filter: drop-shadow(0 0.5px 0.5px rgba(58, 12, 18, 0.5)) drop-shadow(0 2px 3px rgba(70, 25, 20, 0.22));
+}
+.seal-shine {
+  animation: lt-shine 7s ease-in-out 4.2s infinite;
+}
+
+.lt-hint-wrap {
+  transition: opacity 0.5s ease;
+}
+.lt-screen:not(.is-idle) .lt-hint-wrap {
+  opacity: 0;
+}
+.lt-hint {
+  margin-top: clamp(14px, 3.2svh, 28px);
+  font-size: clamp(1rem, 3.8vw, 1.15rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #8a6a3e;
+}
+.lt-breathe {
+  display: inline-block;
+  animation: lt-breathe 3.4s ease-in-out 4.8s infinite;
+}
+
+.lt-in {
+  animation: lt-rise 1.4s var(--ease-out) var(--d, 0ms) backwards;
+}
+
+.lt-bloom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    var(--lt-grain),
+    radial-gradient(circle at 50% 48%, #fffdf8 0%, #fbf7ef 45%, var(--lt-ivory) 85%);
+  transition: opacity 1s ease 0.3s;
+}
+.is-revealing .lt-bloom,
+.is-opened .lt-bloom {
+  opacity: 1;
+}
+.is-revealing .lt-corner,
+.is-opened .lt-corner {
+  opacity: 0;
+}
+
+@keyframes lt-bg-in {
+  from { background-color: #fdfbf7; }
+}
+@keyframes lt-fade {
+  from { opacity: 0; }
+}
+@keyframes lt-card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.94);
+  }
+}
+@keyframes lt-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 9px, 0);
+  }
+}
+@keyframes lt-peacock {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0) scale(0.95);
+  }
+}
+@keyframes lt-seal-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lt-shine {
+  0% { transform: translateX(0); }
+  32%, 100% { transform: translateX(210px); }
+}
+@keyframes lt-shade {
+  0% { opacity: 0; }
+  45% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+@keyframes lt-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lt-screen,
+  .lt-bg,
+  .lt-corner,
+  .lt-enter,
+  .lt-in,
+  .lt-peacock,
+  .lt-seal-slot {
+    animation: lt-fade 0.6s ease backwards;
+  }
+  .seal-shine,
+  .lt-breathe,
+  .is-opening .lt-shade {
+    animation: none;
+  }
+  .lt-flap,
+  .lt-card,
+  .lt-seal {
+    transition: opacity 0.5s ease;
+  }
+  .is-pressing .lt-seal,
+  .is-opening .lt-seal,
+  .is-idle .lt-card:hover,
+  .is-idle .lt-card:hover .lt-seal,
+  .is-opening .lt-flap-l,
+  .is-opening .lt-flap-r,
+  .is-revealing .lt-flap-l,
+  .is-revealing .lt-flap-r,
+  .is-opened .lt-flap-l,
+  .is-opened .lt-flap-r,
+  .is-pressing .lt-card,
+  .is-revealing .lt-card,
+  .is-opened .lt-card {
+    transform: none;
+  }
+}
+
+/* =====================================================================
+   Temple doorway (phase 2) — carved gold doors opening into divine light
+   ===================================================================== */
+.td-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow: hidden;
+  cursor: pointer;
+  background: radial-gradient(ellipse at 50% 45%, #efe2c8, #dcc49c);
+  transition: opacity 1s ease 0.1s;
+}
+.td-screen.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+.td-screen:not(.is-idle) {
+  cursor: default;
+}
+
+/* 1600 × 1000 scene covering the screen: phones crop the sides, desktops a little top/bottom */
+.td-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(max(100vw, 160vh), 190vh);
+  width: min(max(100vw, 160svh), 190svh);
+  aspect-ratio: 1.6;
+  transform: translate(-50%, -50%);
+}
+.td-cam {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 57.75%;
+  animation: td-cam-in 3.2s var(--ease-out) backwards;
+  transition: transform 1.9s cubic-bezier(0.62, 0, 0.35, 1);
+}
+.is-entering .td-cam,
+.is-leaving .td-cam {
+  transform: scale(3.2);
+}
+
+.td-doorway {
+  position: absolute;
+  perspective: 150vh;
+  perspective: 150svh;
+}
+.td-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  will-change: transform;
+  transition: transform 2.8s cubic-bezier(0.5, 0.05, 0.25, 1) 0.45s;
+}
+.td-leaf svg {
+  transition: filter 2.6s ease 0.5s;
+}
+.td-leaf-l { left: 0; transform-origin: 0 50%; }
+.td-leaf-r { right: 0; transform-origin: 100% 50%; }
+.td-screen:not(.is-idle) .td-leaf-l { transform: rotateY(84deg); }
+.td-screen:not(.is-idle) .td-leaf-r { transform: rotateY(-84deg); }
+.td-screen:not(.is-idle) .td-leaf svg { filter: brightness(0.7); }
+
+/* light leaking through the seam just before the doors move */
+.td-seam {
+  position: absolute;
+  left: 50%;
+  top: 3%;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  opacity: 0;
+  background: linear-gradient(transparent, #fff7dc 12%, #fff7dc 90%, transparent);
+  box-shadow: 0 0 18px 6px rgba(255, 214, 130, 0.75);
+  pointer-events: none;
+}
+.is-opening .td-seam {
+  animation: td-seam 1.5s ease forwards;
+}
+
+.td-rays {
+  transform-box: view-box;
+  transform-origin: 800px 600px;
+}
+.td-screen:not(.is-idle) .td-rays {
+  animation: td-spin 30s linear infinite;
+}
+.td-ring {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+.is-opening .td-ring {
+  animation: td-ring 1.8s ease-out;
+}
+
+.td-lantern {
+  position: absolute;
+  transform-origin: 50% 0;
+  animation: td-sway 6.5s ease-in-out infinite alternate;
+}
+.td-lantern-halo {
+  position: absolute;
+  left: -110%;
+  right: -110%;
+  top: 52%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 222, 150, 0.75), rgba(255, 200, 110, 0.22) 38%, transparent 68%);
+  animation: td-flicker 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+.td-glow {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 130, 0.7), rgba(255, 190, 90, 0.18) 45%, transparent 70%);
+  animation: td-flicker 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.td-air {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+.td-screen:not(.is-idle) .td-air {
+  opacity: 0;
+}
+.td-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 248, 225, 0.95), rgba(255, 220, 150, 0.35) 45%, transparent 70%);
+  opacity: 0;
+  animation: td-float 10s ease-in-out infinite;
+}
+.td-petal {
+  position: absolute;
+  top: -4%;
+  width: 11px;
+  height: 7px;
+  border-radius: 60% 0 60% 0;
+  opacity: 0.85;
+  animation: td-fall 12s linear infinite;
+}
+
+.td-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 46%, transparent 48%, rgba(58, 32, 12, 0.38) 100%);
+}
+.td-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 55%, #fffef8 0%, #fff6dc 40%, #f8ead0 100%);
+  transition: opacity 1.2s ease 0.55s;
+}
+.is-entering .td-flash,
+.is-leaving .td-flash {
+  opacity: 1;
+}
+/* arrives from the ivory of the opened letter */
+.td-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: var(--lt-ivory);
+  animation: td-veil 1.8s ease 0.1s forwards;
+}
+
+.td-cta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--safe-bottom) + 4.5svh);
+  display: flex;
+  justify-content: center;
+  transition: opacity 0.5s ease;
+  animation: lt-rise 1.4s var(--ease-out) 1.6s backwards;
+}
+.td-screen:not(.is-idle) .td-cta {
+  opacity: 0;
+  pointer-events: none;
+}
+.td-btn {
+  position: relative;
+  min-height: 52px;
+  padding: 0 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(241, 221, 166, 0.55);
+  background: rgba(58, 35, 20, 0.5);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #fbf3e6;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  box-shadow: 0 8px 24px -8px rgba(40, 20, 5, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.td-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(241, 221, 166, 0.55);
+  animation: td-pulse 2.6s ease-out 3s infinite;
+}
+.td-btn:active {
+  transform: scale(0.96);
+}
+.td-btn:focus-visible {
+  outline: 1px solid #f1dda6;
+  outline-offset: 4px;
+}
+
+@keyframes td-cam-in {
+  from { transform: scale(1.08); }
+}
+@keyframes td-veil {
+  to { opacity: 0; }
+}
+@keyframes td-seam {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes td-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes td-ring {
+  0% { transform: rotate(0); }
+  20% { transform: rotate(16deg); }
+  42% { transform: rotate(-11deg); }
+  62% { transform: rotate(6deg); }
+  80% { transform: rotate(-3deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes td-sway {
+  from { transform: rotate(-1.3deg); }
+  to { transform: rotate(1.3deg); }
+}
+@keyframes td-flicker {
+  0%, 100% { opacity: 0.9; }
+  30% { opacity: 1; }
+  55% { opacity: 0.78; }
+  75% { opacity: 0.95; }
+}
+@keyframes td-float {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.8); }
+  25% { opacity: 0.9; }
+  75% { opacity: 0.7; }
+  100% { opacity: 0; transform: translate3d(14px, -110px, 0) scale(1.1); }
+}
+@keyframes td-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(0); }
+  50% { transform: translate3d(28px, 55vh, 0) rotate(260deg); }
+  100% { transform: translate3d(-12px, 110vh, 0) rotate(540deg); }
+}
+@keyframes td-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(241, 221, 166, 0.55); }
+  100% { box-shadow: 0 0 0 14px rgba(241, 221, 166, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .td-cam,
+  .td-cta {
+    animation: none;
+  }
+  .td-lantern,
+  .td-lantern-halo,
+  .td-glow,
+  .td-orb,
+  .td-petal,
+  .td-btn::after,
+  .td-screen:not(.is-idle) .td-rays,
+  .is-opening .td-ring,
+  .is-opening .td-seam {
+    animation: none;
+  }
+  .td-orb,
+  .td-petal {
+    display: none;
+  }
+  .td-leaf {
+    transition: opacity 0.5s ease;
+  }
+  .td-screen:not(.is-idle) .td-leaf-l,
+  .td-screen:not(.is-idle) .td-leaf-r {
+    transform: none;
+    opacity: 0;
+  }
+  .is-entering .td-cam,
+  .is-leaving .td-cam {
+    transform: none;
+  }
+  .td-flash {
+    transition: opacity 0.5s ease;
   }
 }

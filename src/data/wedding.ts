@@ -64,3 +64,15 @@ export const SCHEDULE: DaySchedule[] = [
     events: [{ name: 'જાન પ્રસ્થાન', nameEn: 'Jaan Prasthan' }],
   },
 ];
+
+// Opening invitation letter (first screen). Names come from BRIDE.en / GROOM.en above.
+// To use your own artwork, drop a transparent PNG/SVG in public/images and set the path,
+// e.g. peacockImage: '/images/peacock.png' — leave null to use the built-in SVG.
+export const LETTER = {
+  titleGu: 'શુભ વિવાહ',
+  blessing: 'With the blessings of Lord Ganesha and our families.',
+  invite: 'You are cordially invited to celebrate our wedding.',
+  hint: 'Tap to open your invitation',
+  peacockImage: null as string | null,
+  sealImage: null as string | null,
+};
