@@ -10,8 +10,9 @@ npm run build && npm start
 ```
 
 ## Flow
-Sealed letter → tap → ivory → temple doorway → "Tap to Enter" → carved doors swing open into light →
-scratch the gold card → "Ram Ram Jay Raja Ram" starts + flower burst → invitation.
+Temple doorway → "Tap to Enter" → carved doors swing open into light → sealed kankotri appears →
+tap the seal ("Ram Ram Jay Raja Ram" starts) → it opens straight into the website: golden Ganesha
+welcome page → groom → bride → invitation → functions → blessings → final. Normal scrolling from there.
 
 ## Files to add
 | What | Put it at |
@@ -51,3 +52,17 @@ Tapping the card or the wax seal presses the seal, swings the two panels open in
 - `TempleDoors.tsx` — lanterns, glows, floating light and petals, "Tap to Enter", and the opening sequence:
   seam of light → knockers swing → doors swing inward → camera moves through the doorway → scratch card
 - Styles: end of `src/app/globals.css` under "Temple doorway"; timings in `TIMING` inside `TempleDoors.tsx`
+
+## Welcome page + groom / bride sections
+
+- `src/components/WelcomeSection.tsx` — first page of the website: the golden Ganesha picture
+  (`public/images/ganesha-wedding.jpg`, an optimised copy of "Golden Ganesha Wedding Invitation.png") with
+  ॥ श्री गणेशाय नमः ॥, શુભ વિવાહ, names, message, dates, નિમંત્રક and the countdown on its plain lower area.
+  To use another picture, change `BOOKLET.ganeshaImage`, `ganeshaImageRatio` (height ÷ width),
+  `textStart` (where the text begins, as a fraction of the picture height) and `pageColor`.
+- `src/components/PersonSection.tsx` — "Introducing the Groom / Bride" with the gold arch photo frame.
+- Artwork in `src/components/invitation/` (PhotoFrame, Ornaments).
+- All text, names, parents and photos come from `weddingDetails` and `BOOKLET` in `src/data/wedding.ts`.
+  Empty values show a soft placeholder.
+- **Photos** — `public/images/groom.jpg` and `public/images/bride.jpg`; only cropped to the frame, never altered.
+  Adjust `photoAlign` (`'xMidYMin'` keeps the top) if a face is cut off.

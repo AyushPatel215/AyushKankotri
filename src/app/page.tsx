@@ -1,60 +1,62 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { preload } from 'react-dom';
 import { BlessingsSection } from '@/components/BlessingsSection';
 import { Celebration } from '@/components/Celebration';
-import { CoupleSection } from '@/components/CoupleSection';
 import { FinalSection } from '@/components/FinalSection';
-import { HeroSection } from '@/components/HeroSection';
 import { InvitationLetter } from '@/components/InvitationLetter';
 import { InvitationSection } from '@/components/InvitationSection';
 import { MusicButton } from '@/components/MusicButton';
+import { PersonSection } from '@/components/PersonSection';
 import { PetalEffect } from '@/components/PetalEffect';
-import { ScratchScreen } from '@/components/ScratchScreen';
 import { TempleDoors } from '@/components/temple/TempleDoors';
 import { TimelineSection } from '@/components/TimelineSection';
-import { MUSIC_SRC, WEDDING_DATE } from '@/data/wedding';
+import { WelcomeSection } from '@/components/WelcomeSection';
+import { LETTER, MUSIC_SRC, WEDDING_DATE } from '@/data/wedding';
 import { useMusic } from '@/hooks/useMusic';
 
 /**
- * letter   → sealed invitation letter; dissolves into ivory
- * closed   → temple doorway, waiting for "Tap to Enter"
- * opening  → carved doors swing open, camera moves into the light (scratch card waits underneath)
- * scratch  → scratch the gold foil; on reveal the song starts and flowers burst
- * entering → ~2s later the scratch screen fades out by itself, hero words rise
- * open     → free scrolling
+ * closed  → temple doorway, waiting for "Tap to Enter"
+ * opening → carved doors swing open, camera moves into the light
+ * letter  → the sealed kankotri appears; tapping the seal starts the song and opens it,
+ *           Radha Krishna show inside for a moment
+ * open    → the kankotri dissolves straight into the website (golden Ganesha page) — free scrolling
  */
-type Phase = 'letter' | 'closed' | 'opening' | 'scratch' | 'entering' | 'open';
+type Phase = 'closed' | 'opening' | 'letter' | 'open';
 
 export default function Home() {
-  const [phase, setPhase] = useState<Phase>('letter');
+  const [phase, setPhase] = useState<Phase>('closed');
   const [doorsGone, setDoorsGone] = useState(false);
+  const [letterGone, setLetterGone] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   const music = useMusic(MUSIC_SRC);
   const { play } = music;
-
-  // Fires once the letter has dissolved into ivory — the temple doorway emerges from it
-  const handleLetterOpened = useCallback(() => setPhase('closed'), []);
+  // the kankotri's temple background downloads while the doors are showing
+  preload(LETTER.background, { as: 'image' });
+  preload(LETTER.insideImage, { as: 'image' });
 
   const handleOpen = useCallback(() => {
     window.scrollTo(0, 0);
     setPhase('opening');
   }, []);
-  const handleDoorsOpened = useCallback(() => setPhase('scratch'), []);
+  // Door-opening completion event → the sealed kankotri appears in the light
+  const handleDoorsOpened = useCallback(() => setPhase('letter'), []);
   const handleDoorsDone = useCallback(() => setDoorsGone(true), []);
 
-  // After the foil is scratched: song + burst, then move on automatically
-  const handleReveal = useCallback(() => {
-    play(); // still inside the scratch / tap gesture, so mobile browsers allow audio
-    setCelebrating(true);
-    setTimeout(() => setCelebrating(false), 8500);
-    setTimeout(() => {
-      setPhase('entering');
-      setTimeout(() => setPhase('open'), 1200);
-    }, 2000);
-  }, [play]);
+  // Tapping the wax seal is a user gesture, so mobile browsers allow the song to start here
+  const handleLetterTap = useCallback(() => play(), [play]);
 
-  // Lock scroll until the invitation is fully open
+  // Kankotri opened → the website shows through as the ivory fades away, with a flower burst
+  const handleLetterOpened = useCallback(() => {
+    window.scrollTo(0, 0);
+    setPhase('open');
+    setCelebrating(true);
+    setTimeout(() => setLetterGone(true), 1400);
+    setTimeout(() => setCelebrating(false), 8500);
+  }, []);
+
+  // Lock scroll until the website is showing
   useEffect(() => {
     document.body.style.overflow = phase === 'open' ? '' : 'hidden';
     return () => {
@@ -62,43 +64,37 @@ export default function Home() {
     };
   }, [phase]);
 
-  const showScratch = phase === 'opening' || phase === 'scratch' || phase === 'entering';
-  const heroStarted = phase === 'entering' || phase === 'open';
+  const started = phase === 'open';
 
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden">
-      <PetalEffect active={heroStarted} />
+      <PetalEffect active={started} />
 
-      {phase === 'letter' && (
-        <div className="print:hidden">
-          <InvitationLetter onOpened={handleLetterOpened} />
-        </div>
-      )}
-
-      {!doorsGone && (phase === 'closed' || phase === 'opening' || phase === 'scratch') && (
+      {!doorsGone && phase !== 'open' && (
         <div className="print:hidden">
           <TempleDoors onEnter={handleOpen} onOpened={handleDoorsOpened} onDone={handleDoorsDone} />
         </div>
       )}
 
-      {showScratch && (
+      {!letterGone && (phase === 'letter' || phase === 'open') && (
         <div className="print:hidden">
-          <ScratchScreen active={phase === 'scratch'} leaving={phase === 'entering'} onReveal={handleReveal} />
+          <InvitationLetter onOpenStart={handleLetterTap} onOpened={handleLetterOpened} fading={phase === 'open'} />
         </div>
       )}
 
       {celebrating && <Celebration />}
 
       <main className="relative z-[1]">
-        <HeroSection target={WEDDING_DATE} started={heroStarted} />
-        <CoupleSection />
+        <WelcomeSection target={WEDDING_DATE} started={started} />
+        <PersonSection who="groom" />
+        <PersonSection who="bride" />
         <InvitationSection />
         <TimelineSection />
         <BlessingsSection />
         <FinalSection />
       </main>
 
-      {phase !== 'letter' && phase !== 'closed' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
+      {phase !== 'closed' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
     </div>
   );
 }

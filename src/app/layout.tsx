@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, Pinyon_Script, Rasa } from 'next/font/google';
+import { Cormorant_Garamond, Noto_Serif_Devanagari, Pinyon_Script, Rasa } from 'next/font/google';
 import './globals.css';
 
 const rasa = Rasa({
@@ -13,6 +13,13 @@ const cormorant = Cormorant_Garamond({
   weight: ['500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-cormorant',
+  display: 'swap',
+});
+// only for the Sanskrit invocation on the booklet's first page
+const deva = Noto_Serif_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['500', '600'],
+  variable: '--font-deva',
   display: 'swap',
 });
 const pinyon = Pinyon_Script({ subsets: ['latin'], weight: '400', variable: '--font-pinyon', display: 'swap' });
@@ -38,7 +45,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="gu" className={`${rasa.variable} ${cormorant.variable} ${pinyon.variable}`}>
+    <html lang="gu" className={`${rasa.variable} ${cormorant.variable} ${pinyon.variable} ${deva.variable}`}>
       <body>{children}</body>
     </html>
   );

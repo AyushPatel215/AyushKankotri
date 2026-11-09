@@ -65,14 +65,63 @@ export const SCHEDULE: DaySchedule[] = [
   },
 ];
 
-// Opening invitation letter (first screen). Names come from BRIDE.en / GROOM.en above.
-// To use your own artwork, drop a transparent PNG/SVG in public/images and set the path,
-// e.g. peacockImage: '/images/peacock.png' — leave null to use the built-in SVG.
+// The sealed kankotri card. Names come from BRIDE.en / GROOM.en above; `background` is the
+// picture printed on the card. To use your own seal artwork set sealImage, e.g. '/images/seal.png'.
 export const LETTER = {
   titleGu: 'શુભ વિવાહ',
   blessing: 'With the blessings of Lord Ganesha and our families.',
   invite: 'You are cordially invited to celebrate our wedding.',
   hint: 'Tap to open your invitation',
-  peacockImage: null as string | null,
+  // Greeting written at the top of the card, inside the arch
+  welcomeEyebrow: '॥ આપ સાદર આમંત્રિત છો ॥',
+  welcomeTitle: 'You are most cordially invited',
+  welcomeText: 'With warm regards and folded hands, we humbly request the honour of your presence at our wedding.',
+  background: '/images/temple-arch.jpg',
+  // Revealed inside the card when it opens, held for a moment before the Ganesha page
+  insideImage: '/images/radha-krishna.jpg',
   sealImage: null as string | null,
+};
+
+// ---------------------------------------------------------------------------
+// Invitation booklet (the three pages after the temple doors)
+// ---------------------------------------------------------------------------
+// One place for everything the booklet shows. Leave a value as '' when it is not
+// known yet — the page shows a soft placeholder instead of inventing details.
+// photoAlign decides which part of the photo stays visible when it is cropped
+// into the frame (the photo itself is never altered): e.g. 'xMidYMin' keeps the top.
+export const weddingDetails = {
+  groom: {
+    name: GROOM.fullEn,
+    nameGu: 'ચિ. આયુષ',
+    fatherName: PARENTS.fatherEn,
+    motherName: PARENTS.motherEn,
+    photo: GROOM.photo,
+    photoAlign: 'xMidYMin',
+  },
+  bride: {
+    name: BRIDE.fullEn,
+    nameGu: 'ચિ. સૌ. કાં. પ્રિયા',
+    fatherName: '', // bride's father's full name
+    motherName: '', // bride's mother's full name
+    photo: BRIDE.photo,
+    photoAlign: 'xMidYMin',
+  },
+};
+
+export const BOOKLET = {
+  invocation: '॥ श्री गणेशाय नमः ॥',
+  titleGu: 'શુભ વિવાહ',
+  titleEn: 'Shubh Vivah',
+  message:
+    'With the divine blessings of Lord Ganesha and the love and blessings of our families, we cordially invite you to celebrate the auspicious occasion of our wedding.',
+  presence: 'Your presence and blessings will make our celebration even more special.',
+  hostsLabel: 'નિમંત્રક',
+  hosts: [PARENTS.fatherGu, PARENTS.motherGu],
+  family: PARENTS.familyGu,
+  // Background of the first page. The text starts where the picture's plain lower area begins
+  // (textStart = fraction of the image height); pageColor continues the page below the picture.
+  ganeshaImage: '/images/ganesha-wedding.jpg',
+  ganeshaImageRatio: 1536 / 1024, // height / width of the image
+  textStart: 0.68,
+  pageColor: '#fad19e',
 };
