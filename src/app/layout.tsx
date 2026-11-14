@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, Noto_Serif_Devanagari, Pinyon_Script, Rasa } from 'next/font/google';
+import { Cormorant_Garamond, Great_Vibes, Marcellus, Noto_Serif_Devanagari, Pinyon_Script, Rasa } from 'next/font/google';
 import './globals.css';
 
 const rasa = Rasa({
@@ -22,6 +22,9 @@ const deva = Noto_Serif_Devanagari({
   variable: '--font-deva',
   display: 'swap',
 });
+// groom / bride portrait cards
+const marcellus = Marcellus({ subsets: ['latin'], weight: '400', variable: '--font-marcellus', display: 'swap' });
+const vibes = Great_Vibes({ subsets: ['latin'], weight: '400', variable: '--font-vibes', display: 'swap' });
 const pinyon = Pinyon_Script({ subsets: ['latin'], weight: '400', variable: '--font-pinyon', display: 'swap' });
 
 export const metadata: Metadata = {
@@ -45,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="gu" className={`${rasa.variable} ${cormorant.variable} ${pinyon.variable} ${deva.variable}`}>
+    <html lang="gu" className={`${rasa.variable} ${cormorant.variable} ${pinyon.variable} ${deva.variable} ${marcellus.variable} ${vibes.variable}`}>
       <body>{children}</body>
     </html>
   );
