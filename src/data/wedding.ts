@@ -11,6 +11,11 @@ export interface DaySchedule {
   weekday: string;
   weekdayGu: string;
   events: WeddingEvent[];
+  /**
+   * optional full-page painting for this day:
+   * 'couple' sets the couple's names on it (palace scene), 'ceremonies' lists the day's ceremonies (temple arch)
+   */
+  scene?: { image: string; layout: 'couple' | 'ceremonies' };
 }
 
 // Countdown target — first function of the wedding (ગણેશ સ્થાપના, 20 Feb 2027).
@@ -55,6 +60,7 @@ export const SCHEDULE: DaySchedule[] = [
       { name: 'મામેરું', nameEn: 'Mameru' },
       { name: 'હલ્દી રસમ', nameEn: 'Haldi Ceremony' },
     ],
+    scene: { image: '/images/temple-arch.jpg', layout: 'ceremonies' },
   },
   {
     date: '21 February 2027',
@@ -62,6 +68,7 @@ export const SCHEDULE: DaySchedule[] = [
     weekday: 'Sunday',
     weekdayGu: 'રવિવાર',
     events: [{ name: 'જાન પ્રસ્થાન', nameEn: 'Jaan Prasthan' }],
+    scene: { image: '/images/palace-scene.jpg', layout: 'couple' },
   },
 ];
 
