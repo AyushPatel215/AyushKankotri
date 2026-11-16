@@ -63,6 +63,7 @@ export default function Home() {
 
   // Lock scroll until the website is showing
   useEffect(() => {
+    console.log("Rendered....")
     document.body.style.overflow = phase === 'open' ? '' : 'hidden';
     return () => {
       document.body.style.overflow = '';
