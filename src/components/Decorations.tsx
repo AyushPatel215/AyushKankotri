@@ -1,4 +1,4 @@
-import { memo, useId } from 'react';
+import { memo } from 'react';
 
 const GOLD = '#D4AF6A';
 const GOLD_LIGHT = '#F1DDA6';
@@ -6,34 +6,6 @@ const GOLD_DEEP = '#A8833F';
 const NIGHT = '#4B2E22';
 const BLUSH = '#E9B8B3';
 const ROSE = '#B06A68';
-
-/** Toran — mango leaves with jasmine and gold bunches */
-export const Toran = memo(function Toran({ className = '' }: { className?: string }) {
-  const id = useId().replace(/:/g, '');
-  return (
-    <svg className={`block ${className}`} width="100%" height="58" aria-hidden="true">
-      <defs>
-        <linearGradient id={`band-${id}`} x1="0" x2="1">
-          <stop offset="0" stopColor={GOLD_DEEP} />
-          <stop offset="0.5" stopColor={GOLD_LIGHT} />
-          <stop offset="1" stopColor={GOLD_DEEP} />
-        </linearGradient>
-        <pattern id={`toran-${id}`} width="44" height="58" patternUnits="userSpaceOnUse">
-          <path d="M11 6 C2 19 3 35 11 50 C19 35 20 19 11 6 Z" fill={GOLD} />
-          <path d="M11 9 L11 46" stroke={GOLD_LIGHT} strokeWidth="1" />
-          <line x1="33" y1="6" x2="33" y2="12" stroke={GOLD} strokeWidth="1.2" />
-          <circle cx="33" cy="17" r="5.6" fill={GOLD} />
-          <circle cx="33" cy="17" r="2.6" fill={GOLD_LIGHT} />
-          <circle cx="33" cy="28.5" r="4.8" fill={BLUSH} />
-          <circle cx="33" cy="28.5" r="2" fill="#F7DCD8" />
-          <circle cx="33" cy="37.5" r="2.8" fill="#FFFFFF" stroke={GOLD} strokeWidth="0.8" />
-        </pattern>
-      </defs>
-      <rect width="100%" height="58" fill={`url(#toran-${id})`} />
-      <rect width="100%" height="5" fill={`url(#band-${id})`} />
-    </svg>
-  );
-});
 
 /** Stylised Ganesh in gold */
 export const Ganesh = memo(function Ganesh({ size = 80, className = '' }: { size?: number; className?: string }) {
@@ -73,29 +45,6 @@ export const Ganesh = memo(function Ganesh({ size = 80, className = '' }: { size
   );
 });
 
-/** Shikhar mandir in gold with a waving dhaja */
-export const Temple = memo(function Temple({ size = 140, className = '' }: { size?: number; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 120 120" className={className} aria-hidden="true">
-      <line x1="60" y1="4" x2="60" y2="24" stroke={GOLD} strokeWidth="1.4" />
-      <path d="M60 4 L78 9 L60 15 Z" fill={BLUSH} className="temple-flag" />
-      <path d="M32 50 C34 60 43 64 43 76 L21 76 C21 64 30 60 32 50 Z" fill={GOLD_DEEP} />
-      <path d="M88 50 C90 60 99 64 99 76 L77 76 C77 64 86 60 88 50 Z" fill={GOLD_DEEP} />
-      <path d="M60 22 C64 40 79 48 81 76 L39 76 C41 48 56 40 60 22 Z" fill={GOLD} />
-      <circle cx="60" cy="24" r="3.2" fill={GOLD_LIGHT} />
-      <path d="M50 46 L70 46 M45 58 L75 58 M42 68 L78 68" stroke={GOLD_DEEP} strokeWidth="1" />
-      <rect x="18" y="76" width="84" height="26" fill={GOLD_LIGHT} />
-      <rect x="18" y="76" width="84" height="4" fill={GOLD_DEEP} />
-      <rect x="27" y="84" width="5" height="18" fill={GOLD} />
-      <rect x="88" y="84" width="5" height="18" fill={GOLD} />
-      <path d="M50 102 L50 89 A10 10 0 0 1 70 89 L70 102 Z" fill={NIGHT} />
-      <circle cx="60" cy="93" r="2.4" fill={GOLD_LIGHT} />
-      <rect x="12" y="102" width="96" height="6" fill={GOLD} />
-      <rect x="6" y="108" width="108" height="6" fill={GOLD_DEEP} />
-    </svg>
-  );
-});
-
 /** Kalash with mango leaves and coconut */
 export const Kalash = memo(function Kalash({ size = 64, className = '' }: { size?: number; className?: string }) {
   return (
@@ -115,20 +64,6 @@ export const Kalash = memo(function Kalash({ size = 64, className = '' }: { size
       <circle cx="60" cy="95" r="5" fill={ROSE} />
       <rect x="40" y="127" width="40" height="7" rx="3" fill={GOLD_DEEP} />
     </svg>
-  );
-});
-
-/** Diya with a flickering flame */
-export const Diya = memo(function Diya({ className = '' }: { className?: string }) {
-  return (
-    <div className={`relative w-11 h-12 ${className}`} aria-hidden="true">
-      <span className="diya-flame" />
-      <svg viewBox="0 0 44 24" className="absolute bottom-0 left-0 w-11 h-6">
-        <path d="M2 6 C6 22 38 22 42 6 Z" fill={GOLD} />
-        <path d="M2 6 L42 6" stroke={GOLD_LIGHT} strokeWidth="2" strokeLinecap="round" />
-        <path d="M10 11 Q22 17 34 11" fill="none" stroke={GOLD_DEEP} strokeWidth="1.2" />
-      </svg>
-    </div>
   );
 });
 
@@ -176,16 +111,6 @@ export const Mandala = memo(function Mandala({
         ))}
       </g>
     </svg>
-  );
-});
-
-/** Jharokha arch outline (double gold rule) — unveils top to bottom when its parent becomes visible */
-export const ArchFrame = memo(function ArchFrame({ className = '' }: { className?: string }) {
-  return (
-    <div className={`arch-frame ${className}`} aria-hidden="true">
-      <span className="arch-line" />
-      <span className="arch-line inner" />
-    </div>
   );
 });
 
