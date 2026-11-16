@@ -574,8 +574,8 @@
 .lt-card {
   position: relative;
   display: block;
-  width: min(84vw, 400px, calc((100vh - 120px) * 0.64));
-  width: min(84vw, 400px, calc((100svh - 120px) * 0.64));
+  width: min(88vw, 400px, calc((100vh - 104px) * 0.64));
+  width: min(88vw, 400px, calc((100svh - 104px) * 0.64));
   aspect-ratio: 0.64;
   container-type: inline-size;
   cursor: pointer;
@@ -782,7 +782,7 @@
 .lt-copy {
   max-width: 58cqw;
   text-wrap: balance;
-  font-size: 3.8cqw;
+  font-size: max(3.8cqw, 11px);
   font-style: italic;
   font-weight: 600;
   line-height: 1.42;
@@ -814,7 +814,7 @@
 }
 .lt-greet-text {
   margin-top: 1cqw;
-  font-size: 3.5cqw;
+  font-size: max(3.5cqw, 10.5px);
   font-style: italic;
   font-weight: 600;
   line-height: 1.38;
@@ -822,7 +822,7 @@
   color: #4a2e1a;
 }
 .lt-greeting + .lt-title {
-  margin-top: 3.4cqw;
+  margin-top: 2.4cqw;
 }
 .lt-couple {
   font-size: 6.4cqw;
@@ -845,7 +845,7 @@
 .lt-seal-slot {
   position: absolute;
   left: 50%;
-  top: calc(79% - 12.5cqw);
+  top: calc(82% - 12.5cqw);
   width: 25cqw;
   margin-left: -12.5cqw;
   animation: lt-seal-in 1.3s var(--ease-out) 2.7s backwards;
@@ -1919,7 +1919,7 @@
 }
 .ds-cer-en {
   font-family: var(--font-serif);
-  font-size: 3.3cqw;
+  font-size: max(3.3cqw, 11px);
   font-style: italic;
   font-weight: 600;
   line-height: 1.3;
@@ -1949,6 +1949,55 @@
   transform-box: view-box;
   transform-origin: 20px 25px;
   animation: ds-flicker 2.6s ease-in-out infinite;
+}
+
+/* venue button on the rangoli floor of the painting */
+.ds-venue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 1s ease 1.6s;
+}
+.ds-scene.is-visible .ds-venue {
+  opacity: 1;
+}
+.ds-venue-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 44px;
+  padding: 0 clamp(16px, 4cqw, 24px);
+  border-radius: 999px;
+  border: 1px solid rgba(168, 116, 58, 0.7);
+  background: linear-gradient(180deg, #fffaf0, #f6e4c0);
+  box-shadow:
+    0 10px 22px -12px rgba(90, 55, 20, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  color: #6b4219;
+  font-size: clamp(0.9rem, 3.4cqw, 1.08rem);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+.ds-venue-btn svg {
+  width: 1.15em;
+  height: 1.15em;
+  color: #a32d34;
+}
+.ds-venue-sep {
+  color: #b08a52;
+}
+.ds-venue-btn:active {
+  transform: scale(0.96);
+}
+.ds-venue-btn:focus-visible {
+  outline: 1px solid #a87838;
+  outline-offset: 3px;
 }
 
 .ds-path {
@@ -2070,6 +2119,7 @@
   .ds-scene-weds,
   .ds-scene-event,
   .ds-cer-list li,
+  .ds-venue,
   .ds-cer-flame,
   .ds-card,
   .ds-flame,
@@ -2077,4 +2127,48 @@
     transition: none;
     animation: none;
   }
+}
+
+/* =====================================================================
+   Phones held sideways: the invitation is designed for portrait
+   ===================================================================== */
+.rotate-hint {
+  display: none;
+}
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .rotate-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #6b4219;
+    background:
+      radial-gradient(ellipse at 50% 45%, #fffaf0, #f3dfb8 85%);
+  }
+  .rotate-hint svg {
+    width: 54px;
+    height: 54px;
+    color: #a87838;
+    animation: rotate-hint 2.4s ease-in-out infinite;
+  }
+  .rotate-hint p:first-of-type {
+    font-family: var(--font-gu);
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .rotate-hint p:last-of-type {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-style: italic;
+  }
+}
+@keyframes rotate-hint {
+  0%, 30% { transform: rotate(-90deg); }
+  60%, 100% { transform: rotate(0deg); }
 }

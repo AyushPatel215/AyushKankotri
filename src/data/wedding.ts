@@ -16,27 +16,34 @@ export interface DaySchedule {
    * 'couple' sets the couple's names on it (palace scene), 'ceremonies' lists the day's ceremonies (temple arch)
    */
   scene?: { image: string; layout: 'couple' | 'ceremonies' };
+  /** Google Maps link for the day's venue — shows a "View venue" button */
+  venueMap?: string;
 }
 
 // Countdown target — first function of the wedding (ગણેશ સ્થાપના, 20 Feb 2027).
 // Change the time once the muhurat is fixed.
 export const WEDDING_DATE = '2027-02-20T08:00:00+05:30';
 
-// Put the song at public/audio/ram-ram-jay-raja-ram.mp3 — the music button hides itself if it is missing
-export const MUSIC_SRC = '/audio/ram-ram-jay-raja-ram.mp3';
+// Music: the intro plays for `introSeconds` on "Tap to Enter"; the main song starts when the
+// Ganesha page appears and repeats. The music button hides itself if the main song is missing.
+export const MUSIC = {
+  intro: '/audio/intro-ram-ram.mp3',
+  introSeconds: 6,
+  main: '/audio/main-ram-ram.mp3',
+};
 
 export const GROOM = {
   en: 'Ayush',
   fullEn: 'Ayush Patel',
   gu: 'આયુષ',
-  photo: '/images/groom.jpg',
+  photo: '/images/ayush_groom.jpg',
 };
 
 export const BRIDE = {
   en: 'Priya',
   fullEn: 'Priya Patel',
   gu: 'પ્રિયા',
-  photo: '/images/bride.jpg',
+  photo: '/images/priya_bride.jpg',
 };
 
 export const PARENTS = {
@@ -61,6 +68,7 @@ export const SCHEDULE: DaySchedule[] = [
       { name: 'હલ્દી રસમ', nameEn: 'Haldi Ceremony' },
     ],
     scene: { image: '/images/temple-arch.jpg', layout: 'ceremonies' },
+    venueMap: 'https://maps.app.goo.gl/nD3Qtr4HRQiMshXy5',
   },
   {
     date: '21 February 2027',

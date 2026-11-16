@@ -19,7 +19,7 @@ welcome page → groom → bride → invitation → functions → blessings → 
 |---|---|
 | Groom photo (portrait, ~3:4) | `public/images/groom.jpg` |
 | Bride photo (portrait, ~3:4) | `public/images/bride.jpg` |
-| Ram Ram Jay Raja Ram song | `public/audio/ram-ram-jay-raja-ram.mp3` |
+| Ram Ram Jay Raja Ram song | `public/audio/main-ram-ram.mp3 (+ intro-ram-ram.mp3)` |
 
 Until the photos are added, a gold initial (આ / પ) shows inside the arch. Without the MP3 the music button hides itself.
 

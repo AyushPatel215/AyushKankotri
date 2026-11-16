@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { Smartphone } from 'lucide-react';
 import { preload } from 'react-dom';
 import { BlessingsSection } from '@/components/BlessingsSection';
 import { Celebration } from '@/components/Celebration';
@@ -13,7 +14,7 @@ import { PetalEffect } from '@/components/PetalEffect';
 import { TempleDoors } from '@/components/temple/TempleDoors';
 import { TimelineSection } from '@/components/TimelineSection';
 import { WelcomeSection } from '@/components/WelcomeSection';
-import { LETTER, MUSIC_SRC, WEDDING_DATE } from '@/data/wedding';
+import { LETTER, MUSIC, WEDDING_DATE } from '@/data/wedding';
 import { useMusic } from '@/hooks/useMusic';
 
 /**
@@ -30,31 +31,35 @@ export default function Home() {
   const [doorsGone, setDoorsGone] = useState(false);
   const [letterGone, setLetterGone] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
-  const music = useMusic(MUSIC_SRC);
-  const { play } = music;
+  const music = useMusic(MUSIC);
+  const { start, prime, playMain } = music;
   // the kankotri's temple background downloads while the doors are showing
   preload(LETTER.background, { as: 'image' });
   preload(LETTER.insideImage, { as: 'image' });
 
+  // "Tap to Enter" is the guest's first tap: the short intro plays here (phones allow sound only from a tap)
   const handleOpen = useCallback(() => {
     window.scrollTo(0, 0);
     setPhase('opening');
-  }, []);
+    start();
+  }, [start]);
   // Door-opening completion event → the sealed kankotri appears in the light
   const handleDoorsOpened = useCallback(() => setPhase('letter'), []);
   const handleDoorsDone = useCallback(() => setDoorsGone(true), []);
 
-  // Tapping the wax seal is a user gesture, so mobile browsers allow the song to start here
-  const handleLetterTap = useCallback(() => play(), [play]);
+  // The seal tap is another gesture — make sure the main song is ready to be brought in
+  const handleLetterTap = useCallback(() => prime(), [prime]);
 
   // Kankotri opened → the website shows through as the ivory fades away, with a flower burst
+  // The Ganesha page appears here, and the main song begins (on repeat)
   const handleLetterOpened = useCallback(() => {
     window.scrollTo(0, 0);
     setPhase('open');
+    playMain();
     setCelebrating(true);
     setTimeout(() => setLetterGone(true), 1400);
     setTimeout(() => setCelebrating(false), 8500);
-  }, []);
+  }, [playMain]);
 
   // Lock scroll until the website is showing
   useEffect(() => {
@@ -94,7 +99,14 @@ export default function Home() {
         <FinalSection />
       </main>
 
-      {phase !== 'closed' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
+      {/* phones held sideways are asked to turn upright (CSS shows this only then) */}
+      <div className="rotate-hint" role="status">
+        <Smartphone aria-hidden="true" />
+        <p>કૃપા કરી ફોન ઊભો રાખો</p>
+        <p>Please turn your phone upright</p>
+      </div>
+
+      {phase === 'open' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}
     </div>
   );
 }

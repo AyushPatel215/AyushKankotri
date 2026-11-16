@@ -1,7 +1,7 @@
 'use client';
 
 import { memo, type CSSProperties } from 'react';
-import { Crown, Flame, Flower2, Gift, Sparkles, Sun, UtensilsCrossed, type LucideIcon } from 'lucide-react';
+import { Crown, Flame, Flower2, Gift, MapPin, Sparkles, Sun, UtensilsCrossed, type LucideIcon } from 'lucide-react';
 import { BRIDE, GROOM, SCHEDULE } from '@/data/wedding';
 import { splitTime, toGu } from '@/lib/gujarati';
 import { useReveal } from '@/hooks/useReveal';
@@ -167,6 +167,18 @@ function CoupleScene({ src, events }: { src: string; events: Day['events'] }) {
   );
 }
 
+/** Opens the day's venue in Google Maps */
+function VenueButton({ href }: { href: string }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="ds-venue-btn" aria-label="View the venue on Google Maps">
+      <MapPin aria-hidden="true" />
+      <span className="font-gu">સ્થળ જુઓ</span>
+      <span className="ds-venue-sep" aria-hidden="true">·</span>
+      <span className="font-serif">View Venue</span>
+    </a>
+  );
+}
+
 /** Small lit diya between two gold rules, separating the ceremonies */
 function DiyaRule() {
   return (
@@ -189,11 +201,11 @@ function DiyaRule() {
  * The day's ceremonies set inside the temple-arch painting (1024 × 1536),
  * like a printed programme card; they appear one after another.
  */
-function CeremonyScene({ src, events }: { src: string; events: Day['events'] }) {
+function CeremonyScene({ src, events, venueMap }: { src: string; events: Day['events']; venueMap?: string }) {
   const { ref, visible } = useReveal<HTMLDivElement>();
   return (
     <div ref={ref} className={`ds-scene ds-scene-arch ${visible ? 'is-visible' : ''}`} style={{ backgroundImage: `url("${src}")` }}>
-      <div className="ds-cer" style={at(318, 1024)}>
+      <div className="ds-cer" style={at(300, 1024)}>
         <p className="ds-cer-kicker">॥ શુભ આરંભ ॥</p>
         <p className="ds-cer-title">The Auspicious Beginning</p>
         <ol className="ds-cer-list">
@@ -212,6 +224,12 @@ function CeremonyScene({ src, events }: { src: string; events: Day['events'] }) 
           })}
         </ol>
       </div>
+
+      {venueMap && (
+        <div className="ds-venue" style={at(1450, 1024)}>
+          <VenueButton href={venueMap} />
+        </div>
+      )}
     </div>
   );
 }
@@ -239,7 +257,7 @@ function DayBlock({ day, index }: { day: Day; index: number }) {
       {day.scene?.layout === 'couple' ? (
         <CoupleScene src={day.scene.image} events={day.events} />
       ) : day.scene?.layout === 'ceremonies' ? (
-        <CeremonyScene src={day.scene.image} events={day.events} />
+        <CeremonyScene src={day.scene.image} events={day.events} venueMap={day.venueMap} />
       ) : (
         <ol className="ds-path">
           {day.events.map((event, i) => (

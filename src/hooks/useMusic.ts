@@ -2,67 +2,141 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+export interface MusicTracks {
+  /** short clip played when the guest enters */
+  intro: string;
+  /** how much of the intro to play, in seconds */
+  introSeconds: number;
+  /** song that loops once the invitation is open */
+  main: string;
+}
+
+const INTRO_VOLUME = 0.7;
+const MAIN_VOLUME = 0.65;
+const FADE_MS = 700;
+
 /**
- * Looping background music. play() must be called from inside a user gesture
- * (tap / pointerup) so iOS Safari and in-app browsers (WhatsApp, Instagram) allow it.
- * Pauses while the tab is hidden and resumes when the guest comes back.
+ * Two-part music: a short intro on the first tap, then the main song on a loop.
+ *
+ * Phones only allow sound that starts inside a tap, so `start()` must be called from
+ * one: it plays the intro and also starts the main song *muted*. `playMain()` can then
+ * bring the main song in later without a tap — it only restarts and unmutes it.
+ * Everything pauses while the tab is hidden and resumes when the guest comes back.
  */
-export function useMusic(src: string) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const wantPlayRef = useRef(false);
+export function useMusic(tracks: MusicTracks) {
+  const introRef = useRef<HTMLAudioElement | null>(null);
+  const mainRef = useRef<HTMLAudioElement | null>(null);
+  const wantMainRef = useRef(false);
+  const timersRef = useRef<number[]>([]);
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(true);
 
   useEffect(() => {
-    const audio = new Audio(src);
-    audio.loop = true;
-    audio.preload = 'auto';
-    audio.volume = 0.65;
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
+    const intro = new Audio(tracks.intro);
+    intro.preload = 'auto';
+    intro.volume = INTRO_VOLUME;
+    const main = new Audio(tracks.main);
+    main.preload = 'auto';
+    main.loop = true;
+    main.volume = MAIN_VOLUME;
+    introRef.current = intro;
+    mainRef.current = main;
+
+    // "playing" means the guest can hear the main song
+    const sync = () => setPlaying(!main.paused && !main.muted);
     const onError = () => {
       setAvailable(false);
       setPlaying(false);
     };
-    audio.addEventListener('play', onPlay);
-    audio.addEventListener('pause', onPause);
-    audio.addEventListener('error', onError);
-    audioRef.current = audio;
+    main.addEventListener('play', sync);
+    main.addEventListener('pause', sync);
+    main.addEventListener('volumechange', sync);
+    main.addEventListener('error', onError);
 
     const onVisibility = () => {
-      if (document.hidden) audio.pause();
-      else if (wantPlayRef.current) audio.play().catch(() => {});
+      if (document.hidden) {
+        intro.pause();
+        main.pause();
+      } else if (wantMainRef.current) {
+        main.play().catch(() => {});
+      }
     };
     document.addEventListener('visibilitychange', onVisibility);
 
+    const timers = timersRef.current;
     return () => {
+      timers.forEach(clearTimeout);
       document.removeEventListener('visibilitychange', onVisibility);
-      audio.removeEventListener('play', onPlay);
-      audio.removeEventListener('pause', onPause);
-      audio.removeEventListener('error', onError);
-      audio.pause();
-      audioRef.current = null;
+      main.removeEventListener('play', sync);
+      main.removeEventListener('pause', sync);
+      main.removeEventListener('volumechange', sync);
+      main.removeEventListener('error', onError);
+      intro.pause();
+      main.pause();
+      introRef.current = null;
+      mainRef.current = null;
     };
-  }, [src]);
+  }, [tracks.intro, tracks.main]);
 
-  const play = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    wantPlayRef.current = true;
-    audio.play().catch(() => setPlaying(false));
+  /** Silently get the main song going inside a tap, so it can be unmuted later */
+  const prime = useCallback(() => {
+    const main = mainRef.current;
+    if (!main || !main.paused) return;
+    main.muted = true;
+    main.play().catch(() => {});
   }, []);
 
+  const stopIntro = useCallback(() => {
+    const intro = introRef.current;
+    if (!intro) return;
+    intro.pause();
+    intro.volume = INTRO_VOLUME;
+  }, []);
+
+  /** Call from the first tap: the intro plays for `introSeconds`, then fades and stops */
+  const start = useCallback(() => {
+    const intro = introRef.current;
+    if (!intro) return;
+    intro.currentTime = 0;
+    intro.volume = INTRO_VOLUME;
+    intro.play().catch(() => {});
+    prime();
+
+    const at = (ms: number, fn: () => void) => timersRef.current.push(window.setTimeout(fn, ms));
+    const end = tracks.introSeconds * 1000;
+    // gentle fade (where the browser allows volume changes), then stop
+    for (let i = 1; i <= 7; i++) {
+      at(end - FADE_MS + (FADE_MS / 7) * i, () => {
+        intro.volume = Math.max(0, INTRO_VOLUME * (1 - i / 7));
+      });
+    }
+    at(end, stopIntro);
+  }, [prime, stopIntro, tracks.introSeconds]);
+
+  /** Bring in the main song from the beginning; it then repeats */
+  const playMain = useCallback(() => {
+    const main = mainRef.current;
+    if (!main) return;
+    stopIntro();
+    wantMainRef.current = true;
+    main.currentTime = 0;
+    main.muted = false;
+    if (main.paused) main.play().catch(() => setPlaying(false));
+  }, [stopIntro]);
+
+  /** Music button: pause / resume the main song */
   const toggle = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) {
-      wantPlayRef.current = true;
-      audio.play().catch(() => setPlaying(false));
+    const main = mainRef.current;
+    if (!main) return;
+    if (!main.paused && !main.muted) {
+      wantMainRef.current = false;
+      main.pause();
     } else {
-      wantPlayRef.current = false;
-      audio.pause();
+      wantMainRef.current = true;
+      main.muted = false;
+      main.play().catch(() => setPlaying(false));
     }
   }, []);
 
-  return { playing, available, play, toggle };
+  return { playing, available, start, prime, playMain, toggle };
 }
