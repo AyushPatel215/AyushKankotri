@@ -21,7 +21,7 @@ export const BlessingsSection = memo(function BlessingsSection() {
           <Diya className="mb-1" />
         </Rise>
 
-        <SectionTitle title="મા ઉમિયાના આશીર્વાદ" subtitle="Blessings of our Kuldevi, Maa Umiya" />
+        <SectionTitle title="મા ઉમિયાના આશીર્વાદ" subtitle="અમારાં કુળદેવી" />
 
         <RiseText
           text="કુળદેવી મા ઉમિયાના આશીર્વાદથી આ પવિત્ર બંધન પ્રેમ, વિશ્વાસ અને સમૃદ્ધિથી સદાય ભર્યું રહે."

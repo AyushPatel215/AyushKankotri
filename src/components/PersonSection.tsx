@@ -19,8 +19,8 @@ const ARCH = 'M126 1005 L126 345 L132 321 L136 313 L138 305 L142 299 L144 294 L1
 const PHOTO = { x: 126, y: 41, w: 772, h: 964 };
 
 const PERSON = {
-  groom: { ...weddingDetails.groom, label: 'Groom', relation: 'Son of' },
-  bride: { ...weddingDetails.bride, label: 'Bride', relation: 'Daughter of' },
+  groom: { ...weddingDetails.groom, label: 'વરરાજા', relation: 'સુપુત્ર' },
+  bride: { ...weddingDetails.bride, label: 'કન્યા', relation: 'સુપુત્રી' },
 };
 
 /** artwork pixel → cqw (the card is 1024 px wide) */
@@ -149,7 +149,7 @@ export const PersonSection = memo(function PersonSection({ who }: { who: 'groom'
         </div>
         <div className="pc-line" style={at(1100)}>
           <Rise when={visible} delay={350}>
-            <h2 className="pc-name">{p.name}</h2>
+            <h2 className="pc-name">{p.nameGu}</h2>
           </Rise>
         </div>
         <div className="pc-line" style={at(1216)}>
@@ -160,19 +160,19 @@ export const PersonSection = memo(function PersonSection({ who }: { who: 'groom'
         <div className="pc-line" style={at(1258)}>
           <Rise when={visible} delay={600}>
             <p className="pc-parent">
-              <Detail value={p.fatherName} placeholder="Father's full name" />
+              <Detail value={p.fatherGu} placeholder="પિતાશ્રીનું નામ" />
             </p>
           </Rise>
         </div>
         <div className="pc-line" style={at(1294)}>
           <Rise when={visible} delay={650}>
-            <p className="pc-amp">&amp;</p>
+            <p className="pc-amp">અને</p>
           </Rise>
         </div>
         <div className="pc-line" style={at(1331)}>
           <Rise when={visible} delay={700}>
             <p className="pc-parent">
-              <Detail value={p.motherName} placeholder="Mother's full name" />
+              <Detail value={p.motherGu} placeholder="માતુશ્રીનું નામ" />
             </p>
           </Rise>
         </div>

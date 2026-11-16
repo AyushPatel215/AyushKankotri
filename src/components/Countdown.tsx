@@ -40,10 +40,10 @@ export const Countdown = memo(function Countdown({ target }: { target: string })
   }
 
   const units = [
-    { label: 'દિવસ', en: 'Days', value: time?.days },
-    { label: 'કલાક', en: 'Hours', value: time?.hours },
-    { label: 'મિનિટ', en: 'Minutes', value: time?.minutes },
-    { label: 'સેકન્ડ', en: 'Seconds', value: time?.seconds },
+    { label: 'દિવસ', value: time?.days },
+    { label: 'કલાક', value: time?.hours },
+    { label: 'મિનિટ', value: time?.minutes },
+    { label: 'સેકન્ડ', value: time?.seconds },
   ];
 
   return (
@@ -63,7 +63,6 @@ export const Countdown = memo(function Countdown({ target }: { target: string })
             </span>
           </span>
           <span className="mt-2 font-gu text-cocoa/90 text-base leading-none">{u.label}</span>
-          <span className="mt-1 font-serif italic text-bronze/70 text-sm leading-none">{u.en}</span>
         </div>
       ))}
     </div>

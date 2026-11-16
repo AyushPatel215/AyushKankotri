@@ -50,7 +50,7 @@ export const WelcomeSection = memo(function WelcomeSection({ target, started }: 
 
           <Rise when={started} delay={1050}>
             <p className="gw-couple">
-              {BRIDE.en} <span className="gw-amp">&amp;</span> {GROOM.en}
+              {GROOM.en} <span className="gw-amp">&amp;</span> {BRIDE.en}
             </p>
           </Rise>
 
@@ -62,7 +62,6 @@ export const WelcomeSection = memo(function WelcomeSection({ target, started }: 
           <Rise when={started} delay={1450} className="mt-7 flex flex-col items-center leading-snug">
             <span className="font-gu font-bold gw-strong text-xl">શનિવાર - રવિવાર</span>
             <span className="font-gu font-bold gw-strong text-xl">૨૦ - ૨૧ ફેબ્રુઆરી ૨૦૨૭</span>
-            <span className="font-serif italic gw-soft text-base">20 - 21 February 2027</span>
           </Rise>
 
           <Rise when={started} delay={1650} className="mt-7">

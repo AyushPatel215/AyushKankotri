@@ -32,7 +32,7 @@ export default function Home() {
   const [letterGone, setLetterGone] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   const music = useMusic(MUSIC);
-  const { start, prime, playMain } = music;
+  const { playIntro, playMain } = music;
   // the kankotri's temple background downloads while the doors are showing
   preload(LETTER.background, { as: 'image' });
   preload(LETTER.insideImage, { as: 'image' });
@@ -41,14 +41,14 @@ export default function Home() {
   const handleOpen = useCallback(() => {
     window.scrollTo(0, 0);
     setPhase('opening');
-    start();
-  }, [start]);
+    playIntro();
+  }, [playIntro]);
   // Door-opening completion event → the sealed kankotri appears in the light
   const handleDoorsOpened = useCallback(() => setPhase('letter'), []);
   const handleDoorsDone = useCallback(() => setDoorsGone(true), []);
 
-  // The seal tap is another gesture — make sure the main song is ready to be brought in
-  const handleLetterTap = useCallback(() => prime(), [prime]);
+  // Tapping the kankotri plays the 6-second intro again (and keeps the main song ready)
+  const handleLetterTap = useCallback(() => playIntro(), [playIntro]);
 
   // Kankotri opened → the website shows through as the ivory fades away, with a flower burst
   // The Ganesha page appears here, and the main song begins (on repeat)
@@ -63,7 +63,6 @@ export default function Home() {
 
   // Lock scroll until the website is showing
   useEffect(() => {
-    console.log("Rendered....")
     document.body.style.overflow = phase === 'open' ? '' : 'hidden';
     return () => {
       document.body.style.overflow = '';
@@ -104,7 +103,6 @@ export default function Home() {
       <div className="rotate-hint" role="status">
         <Smartphone aria-hidden="true" />
         <p>કૃપા કરી ફોન ઊભો રાખો</p>
-        <p>Please turn your phone upright</p>
       </div>
 
       {phase === 'open' && music.available && <MusicButton playing={music.playing} onToggle={music.toggle} />}

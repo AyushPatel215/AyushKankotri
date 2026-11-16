@@ -29,10 +29,10 @@ const pinyon = Pinyon_Script({ subsets: ['latin'], weight: '400', variable: '--f
 
 export const metadata: Metadata = {
   title: 'શુભ વિવાહ | Ayush ❤️ Priya',
-  description: 'શુભ વિવાહ — Ayush ❤️ Priya | 20 - 21 February 2027',
+  description: 'શુભ વિવાહ — Ayush ❤️ Priya | ૨૦ - ૨૧ ફેબ્રુઆરી ૨૦૨૭',
   openGraph: {
     title: 'શુભ વિવાહ | Ayush ❤️ Priya',
-    description: 'આપ સાદર આમંત્રિત છો · 20 - 21 February 2027',
+    description: 'આપ સાદર આમંત્રિત છો · ૨૦ - ૨૧ ફેબ્રુઆરી ૨૦૨૭',
     type: 'website',
   },
 };

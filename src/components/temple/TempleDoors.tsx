@@ -7,7 +7,7 @@ import { TempleBack } from './TempleBack';
 import { TempleFront } from './TempleFront';
 
 /**
- * idle     → doorway waiting, lanterns glowing, "Tap to Enter"
+ * idle     → doorway waiting, lanterns glowing, "પ્રવેશ કરો" (tap to enter)
  * opening  → light leaks through the seam, knockers swing, doors swing inward
  * entering → camera moves through the doorway into the light
  * leaving  → scene dissolves; the next stage is already showing underneath

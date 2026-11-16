@@ -64,7 +64,6 @@ function EventCard({ event, index }: { event: Day['events'][number]; index: numb
         </div>
         <div className="min-w-0 flex-1 text-left">
           <p className="font-gu font-bold text-cocoa text-[1.14rem] leading-snug">{event.name}</p>
-          <p className="font-serif italic text-bronze/80 text-[1rem] leading-snug">{event.nameEn}</p>
         </div>
         {t && (
           <div className="shrink-0 text-right pl-1">
@@ -155,10 +154,7 @@ function CoupleScene({ src, events }: { src: string; events: Day['events'] }) {
           return (
             <div key={event.nameEn}>
               <p className="ds-scene-event-gu">{event.name}</p>
-              <p className="ds-scene-event-en">
-                {event.nameEn}
-                {t && ` · ${t.clock} ${t.meridiem}`}
-              </p>
+              {t && <p className="ds-scene-event-en">{`${t.periodGu} ${toGu(t.clock)} વાગ્યે`}</p>}
             </div>
           );
         })}
@@ -170,11 +166,9 @@ function CoupleScene({ src, events }: { src: string; events: Day['events'] }) {
 /** Opens the day's venue in Google Maps */
 function VenueButton({ href }: { href: string }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" className="ds-venue-btn" aria-label="View the venue on Google Maps">
+    <a href={href} target="_blank" rel="noopener noreferrer" className="ds-venue-btn" aria-label="ગૂગલ મેપ્સ પર સ્થળ જુઓ">
       <MapPin aria-hidden="true" />
       <span className="font-gu">સ્થળ જુઓ</span>
-      <span className="ds-venue-sep" aria-hidden="true">·</span>
-      <span className="font-serif">View Venue</span>
     </a>
   );
 }
@@ -207,7 +201,7 @@ function CeremonyScene({ src, events, venueMap }: { src: string; events: Day['ev
     <div ref={ref} className={`ds-scene ds-scene-arch ${visible ? 'is-visible' : ''}`} style={{ backgroundImage: `url("${src}")` }}>
       <div className="ds-cer" style={at(300, 1024)}>
         <p className="ds-cer-kicker">॥ શુભ આરંભ ॥</p>
-        <p className="ds-cer-title">The Auspicious Beginning</p>
+        <p className="ds-cer-title">લગ્નોત્સવનો પ્રથમ દિવસ</p>
         <ol className="ds-cer-list">
           {events.map((event, i) => {
             const t = event.time ? splitTime(event.time) : null;
@@ -215,10 +209,7 @@ function CeremonyScene({ src, events, venueMap }: { src: string; events: Day['ev
               <li key={event.nameEn} style={{ ['--i' as string]: i } as CSSProperties}>
                 {i > 0 && <DiyaRule />}
                 <p className="ds-cer-gu">{event.name}</p>
-                <p className="ds-cer-en">
-                  {event.nameEn}
-                  {t && ` · ${t.clock} ${t.meridiem}`}
-                </p>
+                {t && <p className="ds-cer-en">{`${t.periodGu} ${toGu(t.clock)} વાગ્યે`}</p>}
               </li>
             );
           })}
@@ -249,9 +240,7 @@ function DayBlock({ day, index }: { day: Day; index: number }) {
         <p className="mt-3 font-gu text-bronze text-sm tracking-wide">
           દિવસ {toGu(index + 1)} · {day.weekdayGu}
         </p>
-        <p className="font-serif italic text-cocoa/80 text-lg leading-tight">
-          {day.weekday}, {day.date}
-        </p>
+        <p className="font-gu font-semibold text-cocoa/80 text-lg leading-tight">{day.dateGu}</p>
       </div>
 
       {day.scene?.layout === 'couple' ? (
@@ -273,7 +262,7 @@ function DayBlock({ day, index }: { day: Day; index: number }) {
 export const TimelineSection = memo(function TimelineSection() {
   return (
     <section id="timeline" className="ds-section section section-glow safe-x">
-      <SectionTitle title="શુભ પ્રસંગો" subtitle="Wedding functions" />
+      <SectionTitle title="શુભ પ્રસંગો" />
       <div className="relative max-w-md mx-auto flex flex-col gap-16">
         {SCHEDULE.map((day, i) => (
           <DayBlock key={day.date} day={day} index={i} />

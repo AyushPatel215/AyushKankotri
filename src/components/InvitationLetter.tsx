@@ -48,7 +48,7 @@ function CardFace() {
         <span />
       </div>
       <p className="lt-in lt-couple font-serif" style={d(2050)}>
-        {BRIDE.en} <span className="lt-couple-amp">&amp;</span> {GROOM.en}
+        {GROOM.en} <span className="lt-couple-amp">&amp;</span> {BRIDE.en}
       </p>
       <p className="lt-in lt-copy font-serif" style={d(2250)}>
         {LETTER.blessing}
@@ -128,7 +128,7 @@ export const InvitationLetter = memo(function InvitationLetter({
     }
   };
 
-  const names = `${BRIDE.en} & ${GROOM.en}`;
+  const names = `${GROOM.en} & ${BRIDE.en}`;
 
   return (
     <div
@@ -161,7 +161,7 @@ export const InvitationLetter = memo(function InvitationLetter({
               <Panel side="r" />
             </div>
             <span className="sr-only">
-              {LETTER.titleGu}. {names}. {LETTER.blessing} {LETTER.invite}
+              {LETTER.titleGu}. {names}. {LETTER.blessing}
             </span>
           </div>
         </div>

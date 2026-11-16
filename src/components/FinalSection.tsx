@@ -12,7 +12,7 @@ export const FinalSection = memo(function FinalSection() {
     <>
       <section id="final" className="section section-glow safe-x overflow-hidden">
         <div className="relative max-w-md mx-auto text-center">
-          <SectionTitle title="આપ જરૂર પધારજો" subtitle="We await your presence" />
+          <SectionTitle title="આપ જરૂર પધારજો" />
 
           <RiseText text="આપના આગમનની રાહ જોઈશું." className="font-gu text-cocoa/90 text-gu body-text" />
           <RiseText

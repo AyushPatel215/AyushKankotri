@@ -80,7 +80,8 @@ export const SCHEDULE: DaySchedule[] = [
   },
 ];
 
-// The sealed kankotri card. Names come from BRIDE.en / GROOM.en above; `background` is the
+// The sealed kankotri card. Names come from GROOM.gu / BRIDE.gu above (groom first — the
+// kankotri is from the groom's side); `background` is the
 // picture printed on the card. To use your own seal artwork set sealImage, e.g. '/images/seal.png'.
 export const LETTER = {
   titleGu: 'શુભ વિવાહ',
@@ -110,14 +111,18 @@ export const weddingDetails = {
     nameGu: 'ચિ. આયુષ',
     fatherName: PARENTS.fatherEn,
     motherName: PARENTS.motherEn,
+    fatherGu: PARENTS.fatherGu,
+    motherGu: PARENTS.motherGu,
     photo: GROOM.photo,
     photoAlign: 'xMidYMin',
   },
   bride: {
     name: BRIDE.fullEn,
-    nameGu: 'ચિ. સૌ. કાં. પ્રિયા',
-    fatherName: '', // bride's father's full name
-    motherName: '', // bride's mother's full name
+    nameGu: 'ચિ. પ્રિયા',
+    fatherName: 'Shri Manubhai Chaturlal Patel',
+    motherName: 'Smt. Bhavnaben Manubhai Patel',
+    fatherGu: 'શ્રી મનુભાઈ ચતુરલાલ પટેલ',
+    motherGu: 'શ્રીમતી ભાવનાબેન મનુભાઈ પટેલ',
     photo: BRIDE.photo,
     photoAlign: 'xMidYMin',
   },
