@@ -8,6 +8,7 @@ import { Celebration } from '@/components/Celebration';
 import { FinalSection } from '@/components/FinalSection';
 import { InvitationLetter } from '@/components/InvitationLetter';
 import { InvitationSection } from '@/components/InvitationSection';
+import { SheetDivider } from '@/components/invitation/Ornaments';
 import { MusicButton } from '@/components/MusicButton';
 import { PersonSection } from '@/components/PersonSection';
 import { PetalEffect } from '@/components/PetalEffect';
@@ -91,12 +92,23 @@ export default function Home() {
 
       <main className="relative z-[1]">
         <WelcomeSection target={WEDDING_DATE} started={started} />
-        <PersonSection who="groom" />
-        <PersonSection who="bride" />
-        <InvitationSection />
-        <TimelineSection />
-        <BlessingsSection />
-        <FinalSection />
+        {/* everything after the Ganesha page is one continuous kankotri sheet with a gold border */}
+        <div className="sheet-wrap">
+          <div className="sheet">
+            <div className="sheet-cap" aria-hidden="true" />
+            <PersonSection who="groom" />
+            <PersonSection who="bride" />
+            <SheetDivider />
+            <InvitationSection />
+            <SheetDivider />
+            <TimelineSection />
+            <SheetDivider />
+            <BlessingsSection />
+            <SheetDivider />
+            <FinalSection />
+            <div className="sheet-cap is-bottom" aria-hidden="true" />
+          </div>
+        </div>
       </main>
 
       {/* phones held sideways are asked to turn upright (CSS shows this only then) */}

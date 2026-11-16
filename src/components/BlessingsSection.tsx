@@ -15,20 +15,8 @@ export const BlessingsSection = memo(function BlessingsSection() {
         opacity={0.1}
       />
       <div className="relative max-w-md mx-auto text-center">
-        <Rise className="flex items-end justify-center gap-4 mb-6">
-          <Diya className="mb-1" />
-          <Temple size={140} />
-          <Diya className="mb-1" />
-        </Rise>
 
-        <SectionTitle title="મા ઉમિયાના આશીર્વાદ" subtitle="અમારાં કુળદેવી" />
-
-        <RiseText
-          text="કુળદેવી મા ઉમિયાના આશીર્વાદથી આ પવિત્ર બંધન પ્રેમ, વિશ્વાસ અને સમૃદ્ધિથી સદાય ભર્યું રહે."
-          className="font-gu text-cocoa/90 text-gu body-text"
-          step={55}
-        />
-
+        <SectionTitle title="મા ઉમિયાના આશીર્વાદ" subtitle="કુળદેવી મા ઉમિયાના આશીર્વાદથી આ પવિત્ર બંધન પ્રેમ, વિશ્વાસ અને સમૃદ્ધિથી સદાય ભર્યું રહે." />
        
       </div>
     </section>

@@ -1431,16 +1431,7 @@
    Sized in cqw so every element stays where it sits in the artwork.
    ===================================================================== */
 .pc-section {
-  background-color: #f6ecd9;
-  background-image: radial-gradient(ellipse at 50% 40%, #fbf4e6, #f1e2c6 85%);
-}
-@media (min-width: 600px) {
-  .pc-section {
-    padding: 40px 16px;
-  }
-  .pc-section + .pc-section {
-    padding-top: 0;
-  }
+  padding: 8px 0 18px;
 }
 .pc-card {
   position: relative;
@@ -1540,9 +1531,7 @@
 /* =====================================================================
    સાદર નિમંત્રણ — royal patra: parchment scroll that unrolls, sealed in wax
    ===================================================================== */
-.iv-section {
-  background-image: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(255, 244, 222, 0.8), transparent 75%);
-}
+
 .iv-scroll {
   position: relative;
   max-width: 30rem;
@@ -2181,4 +2170,117 @@
 @keyframes rotate-hint {
   0%, 30% { transform: rotate(-90deg); }
   60%, 100% { transform: rotate(0deg); }
+}
+
+/* =====================================================================
+   One kankotri sheet: everything after the Ganesha page continues its
+   paper, framed by a gold border down both sides
+   ===================================================================== */
+.sheet-wrap {
+  /* the warm surround seen beside the sheet on wide screens (matches the Ganesha page) */
+  background-color: #f3cf9f;
+  background-image: radial-gradient(ellipse 60% 40% at 50% 30%, #f8dcb0, rgba(243, 207, 159, 0) 70%);
+}
+.sheet {
+  --sheet-line: rgba(168, 116, 58, 0.6);
+  --sheet-inset: 7px;
+  position: relative;
+  width: min(100%, 600px);
+  margin: 0 auto;
+  /* room at the foot for the music button; on phones the paper runs to the very bottom */
+  padding: 0 clamp(14px, 4vw, 26px) calc(var(--safe-bottom) + 76px);
+  background-color: #f8e3c1;
+  /* starts exactly on the Ganesha page's colour, then settles into champagne cream */
+  background-image: linear-gradient(180deg, #fad19e 0, #f9e0b8 520px, #f8e4c3 1000px, #f8e4c3 100%);
+  box-shadow: 0 30px 60px -10px rgba(122, 78, 34, 0.35);
+}
+@media (min-width: 600px) {
+  .sheet {
+    margin-bottom: 48px;
+    padding-bottom: 28px;
+    border-radius: 0 0 6px 6px;
+  }
+  .sheet::before,
+  .sheet::after {
+    bottom: 58px;
+  }
+  .sheet-wrap {
+    padding-bottom: 1px;
+  }
+}
+/* side borders: fine double line with a diamond chain between */
+.sheet::before,
+.sheet::after {
+  content: '';
+  position: absolute;
+  top: 30px;
+  bottom: calc(var(--safe-bottom) + 76px + 30px);
+  z-index: 2;
+  width: 9px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--sheet-line), var(--sheet-line)) 0 0 / 1px 100% no-repeat,
+    linear-gradient(var(--sheet-line), var(--sheet-line)) 100% 0 / 1px 100% no-repeat,
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='18'><path d='M4.5 5 L7.5 9 L4.5 13 L1.5 9Z' fill='%23b8864a' opacity='0.75'/></svg>") center top / 9px 18px repeat-y;
+}
+.sheet::before {
+  left: var(--sheet-inset);
+}
+.sheet::after {
+  right: var(--sheet-inset);
+}
+/* top and bottom caps: double rule meeting the side borders, lotus in the middle */
+.sheet-cap {
+  position: relative;
+  height: 44px;
+  margin: 0 calc(-1 * clamp(14px, 4vw, 26px));
+  pointer-events: none;
+}
+.sheet-cap::before {
+  content: '';
+  position: absolute;
+  left: var(--sheet-inset);
+  right: var(--sheet-inset);
+  top: 30px;
+  height: 5px;
+  /* double rule that stops either side of the lotus */
+  background:
+    linear-gradient(var(--sheet-line), var(--sheet-line)) left top / calc(50% - 64px) 1px no-repeat,
+    linear-gradient(var(--sheet-line), var(--sheet-line)) left bottom / calc(50% - 64px) 1px no-repeat,
+    linear-gradient(var(--sheet-line), var(--sheet-line)) right top / calc(50% - 64px) 1px no-repeat,
+    linear-gradient(var(--sheet-line), var(--sheet-line)) right bottom / calc(50% - 64px) 1px no-repeat;
+}
+.sheet-cap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 110px;
+  height: 34px;
+  margin-left: -55px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='34' viewBox='0 0 110 34'><g fill='%23b8864a'><path d='M55 4 C49 11 49 19 55 26 C61 19 61 11 55 4Z'/><path d='M55 26 C46 23 40 16 39 11 C46 12 51 18 55 26Z M55 26 C64 23 70 16 71 11 C64 12 59 18 55 26Z' opacity='0.8'/><path d='M55 26 C44 28 37 24 34 21 C42 20 49 22 55 26Z M55 26 C66 28 73 24 76 21 C68 20 61 22 55 26Z' opacity='0.6'/><circle cx='30' cy='27' r='1.8'/><circle cx='80' cy='27' r='1.8'/></g></svg>") center / contain no-repeat;
+}
+.sheet-cap.is-bottom {
+  transform: scaleY(-1);
+}
+
+
+/* chapter divider */
+.sheet-divider {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
+}
+.sheet-divider-art {
+  width: min(62%, 300px);
+  height: auto;
+}
+
+/* sections sit on the sheet's paper and read a little tighter */
+.sheet > section.section {
+  padding-top: clamp(2.5rem, 9vw, 3.75rem);
+  padding-bottom: clamp(2.5rem, 9vw, 3.75rem);
+}
+.sheet footer {
+  padding-bottom: 12px !important;
 }

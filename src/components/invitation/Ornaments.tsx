@@ -52,3 +52,12 @@ export const Separator = memo(function Separator({ className = '' }: { className
     </svg>
   );
 });
+
+/** Gold lotus rule between the chapters of the kankotri sheet */
+export const SheetDivider = memo(function SheetDivider() {
+  return (
+    <div className="sheet-divider" aria-hidden="true">
+      <Separator className="sheet-divider-art" />
+    </div>
+  );
+});

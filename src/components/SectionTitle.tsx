@@ -15,7 +15,6 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle?: st
       {subtitle && (
         <RiseText text={subtitle} className="font-gu font-semibold text-bronze/90 text-lg mt-1" delay={200} />
       )}
-      <Ornament className="mt-3" />
     </div>
   );
 }
