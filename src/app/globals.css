@@ -1721,31 +1721,52 @@
   opacity: 1;
   transform: none;
 }
-.ds-medallion {
-  position: relative;
-  width: 92px;
-  height: 92px;
-  border-radius: 50%;
+/* day heading: big gold date between fine rules, like the Ganesha page's lettering */
+.ds-dh-kicker {
+  font-size: clamp(0.95rem, 4vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #7a4e22;
+}
+.ds-dh-date {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 40%, #fffaf0, #f3e2c1);
-  box-shadow:
-    0 0 0 1px rgba(184, 134, 74, 0.6),
-    0 0 0 6px #fbf3e3,
-    0 0 0 7px rgba(184, 134, 74, 0.4),
-    0 14px 30px -14px rgba(90, 55, 20, 0.5);
+  gap: 14px;
+  width: min(100%, 320px);
+  margin-top: 2px;
 }
-.ds-medallion-ring {
+.ds-dh-num {
+  font-size: clamp(3.4rem, 17vw, 4.4rem);
+  line-height: 1.05;
+  background-image: linear-gradient(100deg, #5e3a16 0%, #8a5a26 22%, #6b4219 42%, #a8743a 52%, #6b4219 70%, #8a5a26 88%, #5e3a16 100%);
+}
+.ds-dh-rule {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(168, 116, 58, 0), rgba(168, 116, 58, 0.85));
+}
+.ds-dh-rule.is-right {
+  transform: scaleX(-1);
+}
+/* small diamond where the rule meets the date */
+.ds-dh-rule::after {
+  content: '';
   position: absolute;
-  inset: -14px;
-  border-radius: 50%;
-  border: 1px dashed rgba(184, 134, 74, 0.6);
+  right: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  background: #a8743a;
+  transform: rotate(45deg);
 }
-.ds-medallion-num {
-  font-size: 2.3rem;
-  line-height: 1;
+.ds-dh-month {
+  margin-top: -2px;
+  font-size: clamp(1.15rem, 5vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #7a4e22;
 }
 
 /* the day's full-page picture, names set live in the sky */
@@ -2173,114 +2194,106 @@
 }
 
 /* =====================================================================
-   One kankotri sheet: everything after the Ganesha page continues its
-   paper, framed by a gold border down both sides
+   After the Ganesha page: the same 600px column carries on. Every painting
+   runs edge to edge and melts into the page colour at top and bottom, the
+   way the Ganesha picture does, so the whole site reads as one kankotri.
    ===================================================================== */
-.sheet-wrap {
-  /* the warm surround seen beside the sheet on wide screens (matches the Ganesha page) */
-  background-color: #f3cf9f;
-  background-image: radial-gradient(ellipse 60% 40% at 50% 30%, #f8dcb0, rgba(243, 207, 159, 0) 70%);
+.pages {
+  /* seen beside the column on wide screens: carries on from the Ganesha page's sides */
+  background-color: #fad19e;
+  background-image: linear-gradient(180deg, #fad19e 0, #f5c992 40%, #fad19e 100%);
 }
-.sheet {
-  --sheet-line: rgba(168, 116, 58, 0.6);
-  --sheet-inset: 7px;
+.pages-column {
   position: relative;
-  width: min(100%, 600px);
+  width: min(100vw, 600px);
   margin: 0 auto;
-  /* room at the foot for the music button; on phones the paper runs to the very bottom */
-  padding: 0 clamp(14px, 4vw, 26px) calc(var(--safe-bottom) + 76px);
-  background-color: #f8e3c1;
-  /* starts exactly on the Ganesha page's colour, then settles into champagne cream */
-  background-image: linear-gradient(180deg, #fad19e 0, #f9e0b8 520px, #f8e4c3 1000px, #f8e4c3 100%);
-  box-shadow: 0 30px 60px -10px rgba(122, 78, 34, 0.35);
+  background-color: #fad19e;
+  /* a breath of light down the middle, like light falling on the paper */
+  background-image: radial-gradient(ellipse 80% 22% at 50% 50%, rgba(255, 238, 205, 0.55), rgba(255, 238, 205, 0));
+  background-size: 100% 1400px;
+  background-repeat: repeat-y;
+  box-shadow: 0 0 60px -10px rgba(122, 78, 34, 0.35);
+  /* shadow only at the sides, so it joins the Ganesha page's column without a seam */
+  clip-path: inset(0 -100px);
 }
-@media (min-width: 600px) {
-  .sheet {
-    margin-bottom: 48px;
-    padding-bottom: 28px;
-    border-radius: 0 0 6px 6px;
-  }
-  .sheet::before,
-  .sheet::after {
-    bottom: 58px;
-  }
-  .sheet-wrap {
-    padding-bottom: 1px;
-  }
+
+/* painting edges dissolve into the page */
+.pages-column .pc-card,
+.pages-column .ds-scene {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 11%, #000 89%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 11%, #000 89%, transparent 100%);
 }
-/* side borders: fine double line with a diamond chain between */
-.sheet::before,
-.sheet::after {
-  content: '';
-  position: absolute;
-  top: 30px;
-  bottom: calc(var(--safe-bottom) + 76px + 30px);
-  z-index: 2;
-  width: 9px;
-  pointer-events: none;
-  background:
-    linear-gradient(var(--sheet-line), var(--sheet-line)) 0 0 / 1px 100% no-repeat,
-    linear-gradient(var(--sheet-line), var(--sheet-line)) 100% 0 / 1px 100% no-repeat,
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='18'><path d='M4.5 5 L7.5 9 L4.5 13 L1.5 9Z' fill='%23b8864a' opacity='0.75'/></svg>") center top / 9px 18px repeat-y;
+.pages-column .pc-section {
+  padding: 0;
 }
-.sheet::before {
-  left: var(--sheet-inset);
+.pages-column .pc-card {
+  width: 100%;
+  box-shadow: none;
+  border-radius: 0;
+  /* warm the artwork's pale paper to exactly the page colour (the photo is a separate layer) */
+  background-color: #fde3bd;
+  background-blend-mode: multiply;
 }
-.sheet::after {
-  right: var(--sheet-inset);
+.pages-column .pc-section + .pc-section {
+  margin-top: -4%;
 }
-/* top and bottom caps: double rule meeting the side borders, lotus in the middle */
-.sheet-cap {
+.pages-column .ds-scene {
+  margin-bottom: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+.pages-column > section.section {
+  padding-top: clamp(2.25rem, 8vw, 3.5rem);
+  padding-bottom: clamp(2.25rem, 8vw, 3.5rem);
+}
+.pages-column .ds-day-head {
+  margin-bottom: 6px;
+}
+
+/* Maa Umiya blessing, set on the page */
+.mj-section {
   position: relative;
-  height: 44px;
-  margin: 0 calc(-1 * clamp(14px, 4vw, 26px));
-  pointer-events: none;
+  padding-top: clamp(1.5rem, 6vw, 2.5rem);
 }
-.sheet-cap::before {
-  content: '';
-  position: absolute;
-  left: var(--sheet-inset);
-  right: var(--sheet-inset);
-  top: 30px;
-  height: 5px;
-  /* double rule that stops either side of the lotus */
-  background:
-    linear-gradient(var(--sheet-line), var(--sheet-line)) left top / calc(50% - 64px) 1px no-repeat,
-    linear-gradient(var(--sheet-line), var(--sheet-line)) left bottom / calc(50% - 64px) 1px no-repeat,
-    linear-gradient(var(--sheet-line), var(--sheet-line)) right top / calc(50% - 64px) 1px no-repeat,
-    linear-gradient(var(--sheet-line), var(--sheet-line)) right bottom / calc(50% - 64px) 1px no-repeat;
-}
-.sheet-cap::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 14px;
-  width: 110px;
-  height: 34px;
-  margin-left: -55px;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='34' viewBox='0 0 110 34'><g fill='%23b8864a'><path d='M55 4 C49 11 49 19 55 26 C61 19 61 11 55 4Z'/><path d='M55 26 C46 23 40 16 39 11 C46 12 51 18 55 26Z M55 26 C64 23 70 16 71 11 C64 12 59 18 55 26Z' opacity='0.8'/><path d='M55 26 C44 28 37 24 34 21 C42 20 49 22 55 26Z M55 26 C66 28 73 24 76 21 C68 20 61 22 55 26Z' opacity='0.6'/><circle cx='30' cy='27' r='1.8'/><circle cx='80' cy='27' r='1.8'/></g></svg>") center / contain no-repeat;
-}
-.sheet-cap.is-bottom {
-  transform: scaleY(-1);
-}
-
-
-/* chapter divider */
-.sheet-divider {
+.mj-text {
   display: flex;
-  justify-content: center;
-  padding: 6px 0;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 8px;
 }
-.sheet-divider-art {
-  width: min(62%, 300px);
-  height: auto;
+.mj-title {
+  margin-top: 4px;
+  font-size: clamp(1.9rem, 8.6vw, 2.5rem);
+  line-height: 1.25;
+}
+.mj-sub {
+  margin-top: 10px;
+  max-width: 26rem;
+  font-size: clamp(1rem, 4.3vw, 1.12rem);
+  line-height: 1.75;
+  color: #4a2e1a;
+  text-wrap: balance;
 }
 
-/* sections sit on the sheet's paper and read a little tighter */
-.sheet > section.section {
-  padding-top: clamp(2.5rem, 9vw, 3.75rem);
-  padding-bottom: clamp(2.5rem, 9vw, 3.75rem);
+/* closing dates, set straight on the page between fine rules */
+.fn-dates {
+  position: relative;
+  padding: 26px 8px;
 }
-.sheet footer {
-  padding-bottom: 12px !important;
+.fn-dates::before,
+.fn-dates::after {
+  content: '';
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 116, 58, 0.7), transparent);
+}
+.fn-dates::before {
+  top: 0;
+}
+.fn-dates::after {
+  bottom: 0;
 }

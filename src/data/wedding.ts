@@ -68,7 +68,7 @@ export const SCHEDULE: DaySchedule[] = [
       { name: 'હલ્દી રસમ', nameEn: 'Haldi Ceremony' },
     ],
     scene: { image: '/images/temple-arch.jpg', layout: 'ceremonies' },
-    venueMap: 'https://maps.app.goo.gl/nD3Qtr4HRQiMshXy5',
+    venueMap: 'https://maps.app.goo.gl/YQXDjqPpq1uRXima9',
   },
   {
     date: '21 February 2027',

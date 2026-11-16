@@ -164,7 +164,7 @@ function CoupleScene({ src, events }: { src: string; events: Day['events'] }) {
 }
 
 /** Opens the day's venue in Google Maps */
-function VenueButton({ href }: { href: string }) {
+export function VenueButton({ href }: { href: string }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className="ds-venue-btn" aria-label="ગૂગલ મેપ્સ પર સ્થળ જુઓ">
       <MapPin aria-hidden="true" />
@@ -195,7 +195,7 @@ function DiyaRule() {
  * The day's ceremonies set inside the temple-arch painting (1024 × 1536),
  * like a printed programme card; they appear one after another.
  */
-function CeremonyScene({ src, events, venueMap }: { src: string; events: Day['events']; venueMap?: string }) {
+function CeremonyScene({ src, events }: { src: string; events: Day['events'] }) {
   const { ref, visible } = useReveal<HTMLDivElement>();
   return (
     <div ref={ref} className={`ds-scene ds-scene-arch ${visible ? 'is-visible' : ''}`} style={{ backgroundImage: `url("${src}")` }}>
@@ -215,40 +215,36 @@ function CeremonyScene({ src, events, venueMap }: { src: string; events: Day['ev
           })}
         </ol>
       </div>
-
-      {venueMap && (
-        <div className="ds-venue" style={at(1450, 1024)}>
-          <VenueButton href={venueMap} />
-        </div>
-      )}
     </div>
   );
 }
 
 function DayBlock({ day, index }: { day: Day; index: number }) {
   const { ref, visible } = useReveal<HTMLDivElement>();
-  const [dayNum, month] = day.dateGu.split(' ');
+  const [dayNum, month, year] = day.dateGu.split(' ');
 
   return (
     <div className="ds-day">
       <div ref={ref} className={`ds-day-head ${visible ? 'is-visible' : ''}`}>
-        <div className="ds-medallion">
-          <span className="spin-med ds-medallion-ring" />
-          <span className="ds-medallion-num gold-text font-gu font-bold">{dayNum}</span>
-          <span className="font-gu text-bronze text-sm leading-none">{month}</span>
-        </div>
-        <p className="mt-3 font-gu text-bronze text-sm tracking-wide">
+        <p className="ds-dh-kicker font-gu">
           દિવસ {toGu(index + 1)} · {day.weekdayGu}
         </p>
-        <p className="font-gu font-semibold text-cocoa/80 text-lg leading-tight">{day.dateGu}</p>
+        <div className="ds-dh-date">
+          <span className="ds-dh-rule" aria-hidden="true" />
+          <span className="ds-dh-num gold-text font-gu font-bold">{dayNum}</span>
+          <span className="ds-dh-rule is-right" aria-hidden="true" />
+        </div>
+        <p className="ds-dh-month font-gu">
+          {month} {year}
+        </p>
       </div>
 
       {day.scene?.layout === 'couple' ? (
         <CoupleScene src={day.scene.image} events={day.events} />
       ) : day.scene?.layout === 'ceremonies' ? (
-        <CeremonyScene src={day.scene.image} events={day.events} venueMap={day.venueMap} />
+        <CeremonyScene src={day.scene.image} events={day.events} />
       ) : (
-        <ol className="ds-path">
+        <ol className="ds-path safe-x">
           {day.events.map((event, i) => (
             <EventCard key={event.nameEn} event={event} index={i} />
           ))}
@@ -261,9 +257,11 @@ function DayBlock({ day, index }: { day: Day; index: number }) {
 /** Wedding functions as a diya-lit path; a day can open with a full-page scene */
 export const TimelineSection = memo(function TimelineSection() {
   return (
-    <section id="timeline" className="ds-section section section-glow safe-x">
-      <SectionTitle title="શુભ પ્રસંગો" />
-      <div className="relative max-w-md mx-auto flex flex-col gap-16">
+    <section id="timeline" className="ds-section section">
+      <div className="safe-x">
+        <SectionTitle title="શુભ પ્રસંગો" />
+      </div>
+      <div className="relative flex flex-col gap-10">
         {SCHEDULE.map((day, i) => (
           <DayBlock key={day.date} day={day} index={i} />
         ))}

@@ -8,7 +8,6 @@ import { Celebration } from '@/components/Celebration';
 import { FinalSection } from '@/components/FinalSection';
 import { InvitationLetter } from '@/components/InvitationLetter';
 import { InvitationSection } from '@/components/InvitationSection';
-import { SheetDivider } from '@/components/invitation/Ornaments';
 import { MusicButton } from '@/components/MusicButton';
 import { PersonSection } from '@/components/PersonSection';
 import { PetalEffect } from '@/components/PetalEffect';
@@ -92,21 +91,16 @@ export default function Home() {
 
       <main className="relative z-[1]">
         <WelcomeSection target={WEDDING_DATE} started={started} />
-        {/* everything after the Ganesha page is one continuous kankotri sheet with a gold border */}
-        <div className="sheet-wrap">
-          <div className="sheet">
-            <div className="sheet-cap" aria-hidden="true" />
+        {/* everything after the Ganesha page continues the same column: paintings run edge
+            to edge and melt into the page colour, so it reads as one long kankotri */}
+        <div className="pages">
+          <div className="pages-column">
             <PersonSection who="groom" />
             <PersonSection who="bride" />
-            <SheetDivider />
             <InvitationSection />
-            <SheetDivider />
             <TimelineSection />
-            <SheetDivider />
             <BlessingsSection />
-            <SheetDivider />
             <FinalSection />
-            <div className="sheet-cap is-bottom" aria-hidden="true" />
           </div>
         </div>
       </main>

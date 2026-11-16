@@ -5,12 +5,13 @@ import { CalendarHeart } from 'lucide-react';
 import { BRIDE, GROOM, SCHEDULE } from '@/data/wedding';
 import { Heart, Mandala, Ornament } from './Decorations';
 import { SectionTitle } from './SectionTitle';
+import { VenueButton } from './TimelineSection';
 import { Rise, RiseText } from './RiseText';
 
 export const FinalSection = memo(function FinalSection() {
   return (
     <>
-      <section id="final" className="section section-glow safe-x overflow-hidden">
+      <section id="final" className="section safe-x overflow-hidden">
         <div className="relative max-w-md mx-auto text-center">
           <SectionTitle title="આપ જરૂર પધારજો" />
 
@@ -21,7 +22,7 @@ export const FinalSection = memo(function FinalSection() {
             delay={250}
           />
 
-          <Rise className="mt-10 glass rounded-3xl px-6 py-8">
+          <Rise className="mt-10 fn-dates">
             <CalendarHeart className="mx-auto w-7 h-7 text-bronze" strokeWidth={1.5} aria-hidden="true" />
             {SCHEDULE.map((day, i) => (
               <div key={day.date}>
@@ -37,6 +38,11 @@ export const FinalSection = memo(function FinalSection() {
                 <p className="font-serif italic text-bronze text-base">
                   {day.weekday}, {day.date}
                 </p>
+                {day.venueMap && (
+                  <div className="mt-4 flex justify-center">
+                    <VenueButton href={day.venueMap} />
+                  </div>
+                )}
               </div>
             ))}
           </Rise>

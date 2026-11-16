@@ -71,8 +71,8 @@ function CardArt({ src, alt, align }: { src: string; alt: string; align: string 
         </clipPath>
         {/* the window keeps a soft cream base so nothing of the artwork's own photo shows */}
         <linearGradient id={`${id}u`} gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="1005">
-          <stop offset="0" stopColor="#efdcbb" />
-          <stop offset="1" stopColor="#faead1" />
+          <stop offset="0" stopColor="#edc48b" />
+          <stop offset="1" stopColor="#f8d09b" />
         </linearGradient>
         <linearGradient id={`${id}uf`} gradientUnits="userSpaceOnUse" x1="0" y1="940" x2="0" y2="1006">
           <stop offset="0" stopColor="#fff" />
@@ -89,10 +89,10 @@ function CardArt({ src, alt, align }: { src: string; alt: string; align: string 
         <mask id={`${id}pm`} maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536">
           <rect width="1024" height="1536" fill={`url(#${id}pf)`} />
         </mask>
-        {/* paper patch over the artwork's original lettering */}
+        {/* paper patch over the artwork's original lettering (colours already carry the page tint) */}
         <radialGradient id={`${id}p`} gradientUnits="userSpaceOnUse" cx="512" cy="1180" r="430">
-          <stop offset="0" stopColor="#fdefda" />
-          <stop offset="1" stopColor="#fcebd2" />
+          <stop offset="0" stopColor="#fbd5a2" />
+          <stop offset="1" stopColor="#fad19c" />
         </radialGradient>
         <filter id={`${id}b`} x="-10%" y="-10%" width="120%" height="120%">
           <feGaussianBlur stdDeviation="12" />
